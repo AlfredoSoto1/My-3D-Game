@@ -1,5 +1,5 @@
 
-#include "graphics/Display.h"
+#include "graphics/component/Display.h"
 
 #include <iostream>
 
@@ -9,16 +9,22 @@ int dispose();
 
 int main() {
 
-	graphics::Display* window = new graphics::Display("Window", 1280, 720);
-	window->build(&init, &update, &dispose);
+	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
+	//graphics::Display* window2 = new graphics::Display("Window 2", 1280, 720);
+
+	window1->setFuntions(&init, &update, &dispose);
+
+	//graphics::Display::build();
+
+	window1->build();
+
+	delete window1;
 
 	return 0;
 }
 
 //initiate GLFW/OpenGL context
 int init() {
-
-	std::cout << "init has begun" << std::endl;
 
 	return 0; //error code
 }

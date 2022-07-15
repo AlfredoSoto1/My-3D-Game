@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\graphics\Display.h" />
+    <ClInclude Include="src\graphics\component\Display.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\graphics\Display.cpp" />
+    <ClCompile Include="src\graphics\component\Display.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
