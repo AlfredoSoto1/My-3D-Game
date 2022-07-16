@@ -14,7 +14,15 @@ int main() {
 
 	structs::ArrayList<int> list;
 
+	list.add(1);
+	list.add(2);
+	list.add(3);
+	list.add(4);
+	list.add(5);
 
+	std::cout << list.getLength() << " " << *list.get(0) << std::endl;
+
+	list.clear();
 
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
 	//graphics::Display* window2 = new graphics::Display("Window 2", 1280, 720);

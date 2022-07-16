@@ -21,6 +21,9 @@
     <ClInclude Include="src\structs\ArrayList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\structs\ArrayListTEMP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\component\Display.cpp">
