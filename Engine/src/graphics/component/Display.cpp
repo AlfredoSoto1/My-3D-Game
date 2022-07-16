@@ -212,13 +212,13 @@ void Display::setDecorated(bool isDecorated) {
 void Display::build() {
 	createDisplay();
 	//create input here
-	//init();
+	init();
 
 	while (!glfwWindowShouldClose(window)) {
 		if (hasResized)
 			glViewport(0, 0, width, height);
 
-		//update();
+		update();
 
 		//update display
 		glfwSwapBuffers(window);
@@ -228,7 +228,7 @@ void Display::build() {
 		processFrames();
 	}
 
-	//dispose();
+	dispose();
 	glfwDestroyWindow(window);
 	isRunning = false;
 

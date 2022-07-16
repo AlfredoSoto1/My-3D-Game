@@ -1,6 +1,8 @@
 
 #include "graphics/component/Display.h"
 
+#include "structs/ArrayList.h"
+
 #include <iostream>
 
 int init();
@@ -8,6 +10,11 @@ int update();
 int dispose();
 
 int main() {
+
+
+	structs::ArrayList<int> list;
+
+
 
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
 	//graphics::Display* window2 = new graphics::Display("Window 2", 1280, 720);

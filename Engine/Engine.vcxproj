@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\component\Display.h" />
+    <ClInclude Include="src\structs\ArrayList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\component\Display.cpp" />
