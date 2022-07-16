@@ -1,37 +1,23 @@
 
 #include "graphics/component/Display.h"
 
-#include "structs/ArrayList.h"
-
 #include <iostream>
 
 int init();
 int update();
 int dispose();
 
+
 int main() {
 
+	std::cout << "MAIN THREAD RESUMED" << std::endl;
 
-	structs::ArrayList<int> list;
-
-	list.add(1);
-	list.add(2);
-	list.add(3);
-	list.add(4);
-	list.add(5);
-
-	std::cout << list.getLength() << " " << *list.get(0) << std::endl;
-
-	list.clear();
-
-	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
+	graphics::Display* window1 = new graphics::Display( "Window 1", 1280, 720);
 	//graphics::Display* window2 = new graphics::Display("Window 2", 1280, 720);
 
-	window1->setFuntions(&init, &update, &dispose);
+	//window1->setFuntions(&init, &update, &dispose);
 
-	//graphics::Display::build();
-
-	window1->build();
+	graphics::Display::BUILD();
 
 	delete window1;
 

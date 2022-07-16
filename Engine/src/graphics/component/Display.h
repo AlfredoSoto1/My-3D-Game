@@ -49,9 +49,13 @@ namespace graphics {
 
 		void build();//make static
 
+		static void BUILD();
+
 	private:
 
 		const char* title;
+
+		int idLocation;
 
 		int xpos, ypos;
 		int width, height;
@@ -82,6 +86,7 @@ namespace graphics {
 		bool hasResized = false;
 		bool isRunning = false;
 		bool vsyncEnabled = true;
+		bool waiting = true;
 
 		int(*init)();
 		int(*update)();
@@ -99,6 +104,8 @@ namespace graphics {
 		bool initGLEW();
 
 		void processFrames();
+
+		static void run(Display* display);
 	};
 }
 

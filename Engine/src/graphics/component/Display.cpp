@@ -6,10 +6,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <thread>
 #include <iostream>
-#include <string.h>
 
+#include "../../structs/ArrayList.h"
+
+using namespace structs;
 using namespace graphics;
+
+ArrayList<Display*> displayList;
+ArrayList<std::thread*> contextThread;
+
+bool forFun = false;
 
 /*
 	Basic Display constructor and destructor
@@ -17,16 +25,29 @@ using namespace graphics;
 
 Display::Display() :
 	title("Display"), width(MIN_WIDTH), height(MIN_HEIGHT) {
+	displayList.add(this);
+	idLocation = displayList.getLength();
 
+	std::thread* displayThread = new std::thread(Display::run, this);
+	displayThread->detach();
+	contextThread.add(displayThread);
 }
 
 Display::Display(const char* title, int width, int height) :
 title(title), width(width), height(height) {
+	displayList.add(this);
+	idLocation = displayList.getLength();
 
+	std::thread* displayThread = new std::thread(Display::run, this);
+	displayThread->detach();
+	contextThread.add(displayThread);
 }
 
 Display::~Display() {
-
+	if (displayList.isEmpty())
+		return;
+	displayList.remove(idLocation - 1);
+	contextThread.remove(idLocation - 1);
 }
 
 void error_callback(int error, const char* description) {
@@ -209,16 +230,38 @@ void Display::setDecorated(bool isDecorated) {
 	glfwSetWindowAttrib(window, GLFW_DECORATED, isDecorated ? GLFW_TRUE : GLFW_FALSE);
 }
 
+void Display::run(Display* display) {
+	std::cout << "Thread started" << std::endl;
+	while (display->waiting);
+	std::cout << "stoped waiting" << std::endl;
+	forFun = true;
+}
+
+void Display::BUILD() {
+	if (displayList.isEmpty())
+		return;
+
+	for (int i = 0; i < displayList.getLength(); i++) {
+		Display* displayPtr = *displayList.get(i);
+		displayPtr->waiting = false;
+	}
+	while (!forFun);
+	std::cout << "program has ended" << std::endl;
+
+}
+
 void Display::build() {
 	createDisplay();
 	//create input here
-	init();
+	if(init != nullptr)
+		init();
 
 	while (!glfwWindowShouldClose(window)) {
 		if (hasResized)
 			glViewport(0, 0, width, height);
 
-		update();
+		if (update != nullptr)
+			update();
 
 		//update display
 		glfwSwapBuffers(window);
@@ -228,7 +271,8 @@ void Display::build() {
 		processFrames();
 	}
 
-	dispose();
+	if (dispose != nullptr)
+		dispose();
 	glfwDestroyWindow(window);
 	isRunning = false;
 
