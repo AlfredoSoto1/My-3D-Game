@@ -12,14 +12,15 @@ int main() {
 
 	std::cout << "MAIN THREAD RESUMED" << std::endl;
 
-	graphics::Display* window1 = new graphics::Display( "Window 1", 1280, 720);
-	//graphics::Display* window2 = new graphics::Display("Window 2", 1280, 720);
+	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
+	graphics::Display* window2 = new graphics::Display("Window 2", 1280/2, 720/2);
 
 	//window1->setFuntions(&init, &update, &dispose);
 
-	graphics::Display::BUILD();
+	graphics::Display::build();
 
 	delete window1;
+	delete window2;
 
 	return 0;
 }

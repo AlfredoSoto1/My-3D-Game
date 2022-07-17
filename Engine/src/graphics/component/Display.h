@@ -47,9 +47,7 @@ namespace graphics {
 		void setResizable(bool isResizable);
 		void setDecorated(bool isDecorated);
 
-		void build();//make static
-
-		static void BUILD();
+		static void build();
 
 	private:
 
@@ -59,6 +57,8 @@ namespace graphics {
 
 		int xpos, ypos;
 		int width, height;
+
+		static int currentDisplaysRunning;
 
 		//Display preferences
 		int frames = 0;
@@ -87,6 +87,8 @@ namespace graphics {
 		bool isRunning = false;
 		bool vsyncEnabled = true;
 		bool waiting = true;
+		bool hasInitiated = false;
+		bool failedToCreate = false;
 
 		int(*init)();
 		int(*update)();
@@ -97,11 +99,13 @@ namespace graphics {
 
 		//Display creation functions
 		void createDisplay();
+		void renderDisplay();
 		void setWindowHints();
 		bool createWindow();
 		void setWindowAttribs();
 		void centerWindow();
 		bool initGLEW();
+		void removeFromHeap();
 
 		void processFrames();
 

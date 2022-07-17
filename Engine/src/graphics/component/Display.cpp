@@ -14,10 +14,10 @@
 using namespace structs;
 using namespace graphics;
 
+int Display::currentDisplaysRunning = 0;
+
 ArrayList<Display*> displayList;
 ArrayList<std::thread*> contextThread;
-
-bool forFun = false;
 
 /*
 	Basic Display constructor and destructor
@@ -44,10 +44,7 @@ title(title), width(width), height(height) {
 }
 
 Display::~Display() {
-	if (displayList.isEmpty())
-		return;
-	displayList.remove(idLocation - 1);
-	contextThread.remove(idLocation - 1);
+	removeFromHeap();
 }
 
 void error_callback(int error, const char* description) {
@@ -230,32 +227,11 @@ void Display::setDecorated(bool isDecorated) {
 	glfwSetWindowAttrib(window, GLFW_DECORATED, isDecorated ? GLFW_TRUE : GLFW_FALSE);
 }
 
-void Display::run(Display* display) {
-	std::cout << "Thread started" << std::endl;
-	while (display->waiting);
-	std::cout << "stoped waiting" << std::endl;
-	forFun = true;
-}
-
-void Display::BUILD() {
-	if (displayList.isEmpty())
-		return;
-
-	for (int i = 0; i < displayList.getLength(); i++) {
-		Display* displayPtr = *displayList.get(i);
-		displayPtr->waiting = false;
-	}
-	while (!forFun);
-	std::cout << "program has ended" << std::endl;
-
-}
-
-void Display::build() {
-	createDisplay();
-	//create input here
-	if(init != nullptr)
+void Display::renderDisplay() {
+	if (init != nullptr)
 		init();
 
+	std::cout << "Display Thread rendering" << std::endl;
 	while (!glfwWindowShouldClose(window)) {
 		if (hasResized)
 			glViewport(0, 0, width, height);
@@ -263,20 +239,75 @@ void Display::build() {
 		if (update != nullptr)
 			update();
 
-		//update display
+		glfwPollEvents();
 		glfwSwapBuffers(window);
 		hasResized = false;
-		glfwPollEvents();
 
+		
 		processFrames();
 	}
-
+	std::cout << "Display Thread destroyed" << std::endl;
 	if (dispose != nullptr)
 		dispose();
 	glfwDestroyWindow(window);
 	isRunning = false;
+	Display::currentDisplaysRunning--;
 
-	glfwTerminate();
+	if (Display::currentDisplaysRunning <= 0)
+		glfwTerminate();
+}
+
+void Display::removeFromHeap() {
+	if (displayList.isEmpty())
+		return;
+	delete* contextThread.get(idLocation - 1);//deletes pointer to displayThread
+	//removes from list the pointers to where the pointers of Display
+	//threads and displays are
+	displayList.remove(idLocation - 1);
+	contextThread.remove(idLocation - 1);
+}
+
+void Display::run(Display* display) {
+	std::cout << "Display Thread " << display->idLocation << " started" << std::endl;
+	while (display->waiting);//Thread sleep until allowed
+
+	display->createDisplay();
+	if (display->failedToCreate)
+		return;
+	display->hasInitiated = true;
+	Display::currentDisplaysRunning++;
+
+	std::cout << "Display Thread " << display->idLocation << " initiated correctly" << std::endl;
+
+	while (!display->isRunning);//Thread sleep until run is allowed
+	display->renderDisplay();
+
+	std::cout << "Display Thread " << display->idLocation << " ended" << std::endl;
+}
+
+void Display::build() {
+	if (displayList.isEmpty())
+		return;
+	for (int i = 0; i < displayList.getLength(); i++) {
+		Display* displayPtr = *displayList.get(i);
+		displayPtr->waiting = false;
+		while (!displayPtr->hasInitiated) {
+			//if (displayPtr->failedToCreate) {
+			//	displayPtr->removeFromHeap();
+			//	break;
+			//}
+		}
+	}
+	std::cout << "Number of threads running " << Display::currentDisplaysRunning << std::endl;
+
+	//Allow threads to run after GLFW initialization
+	for (int i = 0; i < displayList.getLength(); i++) {
+		Display* displayPtr = *displayList.get(i);
+		displayPtr->isRunning = true;//allow the thread to run
+	}
+
+	while (Display::currentDisplaysRunning > 0);//Thread sleep until glfw has terminated
+	std::cout << "program has ended" << std::endl;
 }
 
 /*
@@ -304,6 +335,7 @@ void Display::createDisplay() {
 
 	if (!glfwInit()) {
 		std::cout << "GLFW couldn't initiated correctly" << std::endl;
+		failedToCreate = true;
 		return;
 	}
 
@@ -320,7 +352,6 @@ void Display::createDisplay() {
 
 	if (!initGLEW())
 		return;
-	isRunning = true;
 	glViewport(0, 0, width, height);
 }
 
@@ -329,6 +360,7 @@ bool Display::createWindow() {
 	window = glfwCreateWindow(width, height, title, isFullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
 	if (!window) {
 		std::cout << "Failed to create GLFW window" << std::endl;
+		failedToCreate = true;
 		glfwTerminate();
 		return false;
 	}
@@ -376,6 +408,7 @@ void Display::setWindowAttribs() {
 bool Display::initGLEW() {
 	if (glewInit() != GLEW_OK) {
 		std::cout << "Couldn't inititate GLEW correctly" << std::endl;
+		failedToCreate = true;
 		return false;
 	}
 	else {
