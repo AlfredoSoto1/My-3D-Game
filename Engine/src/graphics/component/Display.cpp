@@ -246,7 +246,7 @@ void Display::renderDisplay() {
 			update();
 
 		//if(idLocation == 2)
-		glfwSwapBuffers(window); // this is the problem, this should be addressed
+		glfwSwapBuffers(glfwGetCurrentContext()); // this is the problem, this should be addressed FIXME
 		hasResized = false;
 		
 		glfwPollEvents();
