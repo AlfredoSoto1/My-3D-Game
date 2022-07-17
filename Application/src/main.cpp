@@ -10,8 +10,6 @@ int dispose();
 
 int main() {
 
-	std::cout << "MAIN THREAD RESUMED" << std::endl;
-
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
 	graphics::Display* window2 = new graphics::Display("Window 2", 1280/2, 720/2);
 

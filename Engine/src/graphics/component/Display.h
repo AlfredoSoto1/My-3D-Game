@@ -105,7 +105,6 @@ namespace graphics {
 		void setWindowAttribs();
 		void centerWindow();
 		bool initGLEW();
-		void removeFromHeap();
 
 		void processFrames();
 

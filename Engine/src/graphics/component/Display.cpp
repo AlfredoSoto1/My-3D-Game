@@ -44,7 +44,7 @@ title(title), width(width), height(height) {
 }
 
 Display::~Display() {
-	removeFromHeap();
+	
 }
 
 void error_callback(int error, const char* description) {
@@ -232,6 +232,12 @@ void Display::renderDisplay() {
 		init();
 
 	std::cout << "Display Thread rendering" << std::endl;
+	std::cout << "Window Pointer Type: " << window << std::endl;
+
+	if(glfwGetCurrentContext() == window)
+		std::cout << "Current context is the same " << std::endl;
+
+
 	while (!glfwWindowShouldClose(window)) {
 		if (hasResized)
 			glViewport(0, 0, width, height);
@@ -239,11 +245,11 @@ void Display::renderDisplay() {
 		if (update != nullptr)
 			update();
 
-		glfwPollEvents();
-		glfwSwapBuffers(window);
+		//if(idLocation == 2)
+		glfwSwapBuffers(window); // this is the problem, this should be addressed
 		hasResized = false;
-
 		
+		glfwPollEvents();
 		processFrames();
 	}
 	std::cout << "Display Thread destroyed" << std::endl;
@@ -257,57 +263,53 @@ void Display::renderDisplay() {
 		glfwTerminate();
 }
 
-void Display::removeFromHeap() {
-	if (displayList.isEmpty())
-		return;
-	delete* contextThread.get(idLocation - 1);//deletes pointer to displayThread
-	//removes from list the pointers to where the pointers of Display
-	//threads and displays are
-	displayList.remove(idLocation - 1);
-	contextThread.remove(idLocation - 1);
-}
-
 void Display::run(Display* display) {
-	std::cout << "Display Thread " << display->idLocation << " started" << std::endl;
+	std::cout << "Display Thread " << display->idLocation << " STARTED" << std::endl;
 	while (display->waiting);//Thread sleep until allowed
-
 	display->createDisplay();
 	if (display->failedToCreate)
 		return;
 	display->hasInitiated = true;
 	Display::currentDisplaysRunning++;
 
-	std::cout << "Display Thread " << display->idLocation << " initiated correctly" << std::endl;
+	std::cout << "Display Thread " << display->idLocation << " INITIATED" << std::endl;
 
 	while (!display->isRunning);//Thread sleep until run is allowed
+
+	std::cout << "Display Thread " << display->idLocation << " RUNNING" << std::endl;
+
 	display->renderDisplay();
 
-	std::cout << "Display Thread " << display->idLocation << " ended" << std::endl;
+	std::cout << "Display Thread " << display->idLocation << " ENED" << std::endl;
 }
 
 void Display::build() {
 	if (displayList.isEmpty())
 		return;
+
 	for (int i = 0; i < displayList.getLength(); i++) {
 		Display* displayPtr = *displayList.get(i);
 		displayPtr->waiting = false;
 		while (!displayPtr->hasInitiated) {
-			//if (displayPtr->failedToCreate) {
-			//	displayPtr->removeFromHeap();
-			//	break;
-			//}
+			if (displayPtr->failedToCreate)
+				break;
 		}
 	}
-	std::cout << "Number of threads running " << Display::currentDisplaysRunning << std::endl;
-
 	//Allow threads to run after GLFW initialization
 	for (int i = 0; i < displayList.getLength(); i++) {
 		Display* displayPtr = *displayList.get(i);
+		if (displayPtr->failedToCreate)
+			continue;
 		displayPtr->isRunning = true;//allow the thread to run
 	}
 
 	while (Display::currentDisplaysRunning > 0);//Thread sleep until glfw has terminated
-	std::cout << "program has ended" << std::endl;
+
+	//Deletes from memory thread pointers
+	for (int i = 0; i < contextThread.getLength(); i++)
+		delete* contextThread.get(i);
+	displayList.clear();
+	contextThread.clear();
 }
 
 /*
