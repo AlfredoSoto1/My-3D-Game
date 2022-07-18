@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "../../structs/ArrayList.h"
+#include "../../io/windowListener.h"
 
 using namespace structs;
 using namespace graphics;
@@ -230,6 +231,10 @@ void Display::setDecorated(bool isDecorated) {
 }
 
 void Display::renderDisplay() {
+
+	glfwSetWindowUserPointer(window, this);
+	listener::WindowListener windowListener = new listener::WindowListener(this);
+
 	if (init != nullptr)
 		init();
 

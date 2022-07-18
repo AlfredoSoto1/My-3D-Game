@@ -5,8 +5,13 @@
 
 #define GLEW_STATIC
 
+#ifndef _GLFW_POINTERS_DEFINED
+#define _GLFW_POINTERS_DEFINED
+
 struct GLFWwindow;
 struct GLFWmonitor;
+
+#endif // !_GLFW_POINTERS_DEFINED
 
 namespace graphics {
 
