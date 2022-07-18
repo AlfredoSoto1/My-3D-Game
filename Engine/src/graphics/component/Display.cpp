@@ -14,6 +14,8 @@
 using namespace structs;
 using namespace graphics;
 
+int timer = 0;
+
 int Display::currentDisplaysRunning = 0;
 
 ArrayList<Display*> displayList;
@@ -232,11 +234,6 @@ void Display::renderDisplay() {
 		init();
 
 	std::cout << "Display Thread rendering" << std::endl;
-	std::cout << "Window Pointer Type: " << window << std::endl;
-
-	if(glfwGetCurrentContext() == window)
-		std::cout << "Current context is the same " << std::endl;
-
 
 	while (!glfwWindowShouldClose(window)) {
 		if (hasResized)
@@ -245,8 +242,20 @@ void Display::renderDisplay() {
 		if (update != nullptr)
 			update();
 
-		//if(idLocation == 2)
-		glfwSwapBuffers(glfwGetCurrentContext()); // this is the problem, this should be addressed FIXME
+		//glClear(GL_COLOR_BUFFER_BIT);
+		//
+		//glBegin(GL_TRIANGLES);
+		//
+		//glVertex2f(-.5, 0.0);
+		//glVertex2f(.5, 0.0);
+		//glVertex2f(0.0, -.5);
+		//
+		//glEnd();
+
+		//glfwSwapBuffers(window);
+
+		std::cout << "Window pointer: " << idLocation << " --> " << window  << " <--" << std::endl;
+
 		hasResized = false;
 		
 		glfwPollEvents();
@@ -303,7 +312,10 @@ void Display::build() {
 		displayPtr->isRunning = true;//allow the thread to run
 	}
 
-	while (Display::currentDisplaysRunning > 0);//Thread sleep until glfw has terminated
+	//Thread sleep until glfw has terminated
+	while (Display::currentDisplaysRunning > 0) {
+		timer++;
+	}
 
 	//Deletes from memory thread pointers
 	for (int i = 0; i < contextThread.getLength(); i++)
@@ -372,9 +384,9 @@ bool Display::createWindow() {
 void Display::setWindowHints() {
 	glfwDefaultWindowHints();
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
 	glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);

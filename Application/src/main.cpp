@@ -13,6 +13,9 @@ int main() {
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
 	graphics::Display* window2 = new graphics::Display("Window 2", 1280/2, 720/2);
 
+	window1->setTargetFps(15);
+	window2->setTargetFps(15);
+
 	//window1->setFuntions(&init, &update, &dispose);
 
 	graphics::Display::build();
