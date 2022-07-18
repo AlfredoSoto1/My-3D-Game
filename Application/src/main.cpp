@@ -11,24 +11,19 @@ int dispose();
 int main() {
 
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
-	graphics::Display* window2 = new graphics::Display("Window 2", 1280/2, 720/2);
 
-	window1->setTargetFps(15);
-	window2->setTargetFps(15);
-
-	//window1->setFuntions(&init, &update, &dispose);
+	window1->setFuntions(&init, &update, &dispose);
 
 	graphics::Display::build();
 
 	delete window1;
-	delete window2;
 
 	return 0;
 }
 
 //initiate GLFW/OpenGL context
 int init() {
-
+	
 	return 0; //error code
 }
 
@@ -47,27 +42,83 @@ int dispose() {
 
 
 
-
+//
 //#define GLEW_STATIC
-
-//#include<GL/glew.h>
-//#include<GLFW/glfw3.h>
 //
-//#include<iostream>
-//int main(void) {
+//#include <GL/glew.h>
+//#include <GLFW/glfw3.h>
 //
+//#include <iostream>
+//#include <thread>
+//
+//int stillRunning = 1;
+//
+//bool thread1Init = false;
+//
+//void runningThread1() {
 //    GLFWwindow* window;
 //
 //    /* Initialize the library */
 //    if (!glfwInit())
-//        return -1;
+//        return;
 //
 //    /* Create a windowed mode window and its OpenGL context */
 //    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
 //    if (!window)
 //    {
 //        glfwTerminate();
-//        return -1;
+//        return;
+//    }
+//
+//    /* Make the window's context current */
+//    glfwMakeContextCurrent(window);
+//
+//    if (glewInit() != GLEW_OK)
+//        std::cout << "Could not initiate glew!" << std::endl;
+//
+//    std::cout << glGetString(GL_VERSION) << std::endl;
+//    thread1Init = true;
+//
+//    /* Loop until the user closes the window */
+//    while (!glfwWindowShouldClose(window))
+//    {
+//        /* Render here */
+//        glClear(GL_COLOR_BUFFER_BIT);
+//
+//        glBegin(GL_TRIANGLES);
+//
+//        glVertex2f(-.5, 0.0);
+//        glVertex2f(.5, 0.0);
+//        glVertex2f(0.0, -.5);
+//
+//
+//        glEnd();
+//
+//
+//        /* Swap front and back buffers */
+//        glfwSwapBuffers(window);
+//
+//        /* Poll for and process events */
+//        glfwPollEvents();
+//    }
+//    stillRunning--;
+//}
+//
+//void runningThread2() {
+//    GLFWwindow* window;
+//
+//    while (!thread1Init);
+//
+//    /* Initialize the library */
+//    if (!glfwInit())
+//        return;
+//
+//    /* Create a windowed mode window and its OpenGL context */
+//    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+//    if (!window)
+//    {
+//        glfwTerminate();
+//        return;
 //    }
 //
 //    /* Make the window's context current */
@@ -96,12 +147,32 @@ int dispose() {
 //
 //
 //        /* Swap front and back buffers */
-//        glfwSwapBuffers(window);
+//        try {
+//            glfwSwapBuffers(window);
+//        }
+//        catch (int numErr) {
+//            std::cout << "Ex thread 2: " << numErr << std::endl;
+//        }
 //
 //        /* Poll for and process events */
 //        glfwPollEvents();
 //    }
+//    stillRunning--;
+//}
+//
+//int main(void) {
+//
+//    std::thread* thread1 = new std::thread(&runningThread1);
+//    thread1->detach();
+//   /* std::thread* thread2 = new std::thread(&runningThread2);
+//    thread2->detach();*/
+//
+//    while (stillRunning > 0);
 //
 //    glfwTerminate();
+//
+//    delete thread1;
+//    //delete thread2;
+//
 //    return 0;
 //}

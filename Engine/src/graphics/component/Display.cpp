@@ -233,8 +233,6 @@ void Display::renderDisplay() {
 	if (init != nullptr)
 		init();
 
-	std::cout << "Display Thread rendering" << std::endl;
-
 	while (!glfwWindowShouldClose(window)) {
 		if (hasResized)
 			glViewport(0, 0, width, height);
@@ -242,26 +240,23 @@ void Display::renderDisplay() {
 		if (update != nullptr)
 			update();
 
-		//glClear(GL_COLOR_BUFFER_BIT);
-		//
-		//glBegin(GL_TRIANGLES);
-		//
-		//glVertex2f(-.5, 0.0);
-		//glVertex2f(.5, 0.0);
-		//glVertex2f(0.0, -.5);
-		//
-		//glEnd();
-
-		//glfwSwapBuffers(window);
-
-		std::cout << "Window pointer: " << idLocation << " --> " << window  << " <--" << std::endl;
-
-		hasResized = false;
+		glClear(GL_COLOR_BUFFER_BIT);
 		
+		glBegin(GL_TRIANGLES);
+		
+		glVertex2f(-.5, 0.0);
+		glVertex2f(.5, 0.0);
+		glVertex2f(0.0, -.5);
+		
+		glEnd();
+
+		glfwSwapBuffers(window);
+		hasResized = false;
+
 		glfwPollEvents();
 		processFrames();
+		
 	}
-	std::cout << "Display Thread destroyed" << std::endl;
 	if (dispose != nullptr)
 		dispose();
 	glfwDestroyWindow(window);
@@ -273,7 +268,6 @@ void Display::renderDisplay() {
 }
 
 void Display::run(Display* display) {
-	std::cout << "Display Thread " << display->idLocation << " STARTED" << std::endl;
 	while (display->waiting);//Thread sleep until allowed
 	display->createDisplay();
 	if (display->failedToCreate)
@@ -281,15 +275,8 @@ void Display::run(Display* display) {
 	display->hasInitiated = true;
 	Display::currentDisplaysRunning++;
 
-	std::cout << "Display Thread " << display->idLocation << " INITIATED" << std::endl;
-
 	while (!display->isRunning);//Thread sleep until run is allowed
-
-	std::cout << "Display Thread " << display->idLocation << " RUNNING" << std::endl;
-
 	display->renderDisplay();
-
-	std::cout << "Display Thread " << display->idLocation << " ENED" << std::endl;
 }
 
 void Display::build() {
