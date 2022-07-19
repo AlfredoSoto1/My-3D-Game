@@ -1,11 +1,13 @@
 
 #include "graphics/component/Display.h"
 
-#include <iostream>
+#include "RendererTest.h"
 
 int init();
 int update();
 int dispose();
+
+RendererTest* renderTest;
 
 int main() {
 
@@ -16,25 +18,32 @@ int main() {
 	graphics::Display::build();
 
 	delete window1;
-
 	return 0;
 }
 
 //initiate GLFW/OpenGL context
 int init() {
-	
+
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+	renderTest = new RendererTest();
+	renderTest->init();
 	return 0; //error code
 }
 
 //updates opengl scene
 int update() {
 
+	//always clear buffer before render
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	renderTest->render();
 	return 0; //error code
 }
 
 //disposes or cleans everything created in memory by the library
 int dispose() {
-
+	delete renderTest;
 	return 0; //error code
 }
 

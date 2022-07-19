@@ -18,7 +18,7 @@
     <ClInclude Include="src\graphics\component\Display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\structs\ArrayList.h">
+    <ClInclude Include="src\structs\arrayList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\exceptions\Error.h">
@@ -31,6 +31,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\io\keyListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\structs\linkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\geometry\model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\geometry\mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\shader\shaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,5 +62,15 @@
     <ClCompile Include="src\io\keyListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\geometry\mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\shader\shaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\graphics\shader\defaultFragment.shader" />
+    <None Include="src\graphics\shader\defaultVertex.shader" />
   </ItemGroup>
 </Project>

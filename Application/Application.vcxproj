@@ -154,6 +154,13 @@
       <Project>{70a03f35-f259-4911-bd39-2ef61c34b8c5}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\RendererTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\testF.shader" />
+    <None Include="src\testV.shader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

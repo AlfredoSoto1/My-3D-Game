@@ -9,7 +9,7 @@
 #include <thread>
 #include <iostream>
 
-#include "../../structs/ArrayList.h"
+#include "../../structs/arrayList.h"
 
 using namespace structs;
 using namespace graphics;
@@ -265,15 +265,15 @@ void Display::renderDisplay() {
 		if (update != nullptr)
 			update();
 
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		glBegin(GL_TRIANGLES);
-		
-		glVertex2f(-.5, 0.0);
-		glVertex2f(.5, 0.0);
-		glVertex2f(0.0, -.5);
-		
-		glEnd();
+		//glClear(GL_COLOR_BUFFER_BIT);
+		//
+		//glBegin(GL_TRIANGLES);
+		//
+		//glVertex2f(-.5, 0.0);
+		//glVertex2f(.5, 0.0);
+		//glVertex2f(0.0, -.5);
+		//
+		//glEnd();
 
 		glfwSwapBuffers(window);
 		hasResized = false;
@@ -398,9 +398,9 @@ bool Display::createWindow() {
 void Display::setWindowHints() {
 	glfwDefaultWindowHints();
 
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
 	glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
