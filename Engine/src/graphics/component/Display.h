@@ -13,6 +13,11 @@ struct GLFWmonitor;
 
 #endif // !_GLFW_POINTERS_DEFINED
 
+
+#include "../../io/windowListener.h"
+#include "../../io/mouseListener.h"
+#include "../../io/keyListener.h"
+
 namespace graphics {
 
 	class Display {
@@ -26,6 +31,9 @@ namespace graphics {
 		Display();
 		Display(const char* title, int width, int height);
 		~Display();
+
+		//operator overloading
+		operator GLFWwindow* ();
 
 		//display call functions
 		void close();
@@ -51,8 +59,18 @@ namespace graphics {
 		void setAlwaysOnTop(bool isAlwaysOnTop);
 		void setResizable(bool isResizable);
 		void setDecorated(bool isDecorated);
+		void setDynamicUpdate(bool isDynamicallyUpdated);
 
+		//return types
+		bool isDynamicallyUpdated();
+		void getDimensions(int* width, int* height);
+
+		//static functions
 		static void build();
+
+		listener::WindowListener* windowListener;
+		listener::MouseListener* mouseListener;
+		listener::KeyListener* keyListener;
 
 	private:
 

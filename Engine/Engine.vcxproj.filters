@@ -27,6 +27,12 @@
     <ClInclude Include="src\io\windowListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\mouseListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\keyListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\component\Display.cpp">
@@ -36,6 +42,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\io\windowListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\mouseListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\keyListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

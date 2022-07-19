@@ -7,7 +7,6 @@ int init();
 int update();
 int dispose();
 
-
 int main() {
 
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);

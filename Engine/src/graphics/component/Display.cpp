@@ -10,12 +10,9 @@
 #include <iostream>
 
 #include "../../structs/ArrayList.h"
-#include "../../io/windowListener.h"
 
 using namespace structs;
 using namespace graphics;
-
-int timer = 0;
 
 int Display::currentDisplaysRunning = 0;
 
@@ -52,6 +49,14 @@ Display::~Display() {
 
 void error_callback(int error, const char* description) {
 	fprintf(stderr, "Error: %s\n", description);
+}
+
+/*
+	Operator overloads
+*/
+
+Display::operator GLFWwindow* () {
+	return window;
 }
 
 /*
@@ -230,10 +235,25 @@ void Display::setDecorated(bool isDecorated) {
 	glfwSetWindowAttrib(window, GLFW_DECORATED, isDecorated ? GLFW_TRUE : GLFW_FALSE);
 }
 
+void Display::setDynamicUpdate(bool isDynamicallyUpdated) {
+	this->dynamicUpdate = isDynamicallyUpdated;
+}
+
+bool Display::isDynamicallyUpdated() {
+	return dynamicUpdate;
+}
+
+void Display::getDimensions(int* width, int* height) {
+	*width = this->width;
+	*height = this->height;
+}
+
 void Display::renderDisplay() {
 
 	glfwSetWindowUserPointer(window, this);
-	listener::WindowListener windowListener = new listener::WindowListener(this);
+	this->windowListener = new listener::WindowListener(this);
+	this->mouseListener = new listener::MouseListener(this);
+	this->keyListener = new listener::KeyListener(this);
 
 	if (init != nullptr)
 		init();
@@ -260,10 +280,14 @@ void Display::renderDisplay() {
 
 		glfwPollEvents();
 		processFrames();
-		
 	}
 	if (dispose != nullptr)
 		dispose();
+
+	delete windowListener;
+	delete mouseListener;
+	delete keyListener;
+
 	glfwDestroyWindow(window);
 	isRunning = false;
 	Display::currentDisplaysRunning--;
@@ -305,9 +329,7 @@ void Display::build() {
 	}
 
 	//Thread sleep until glfw has terminated
-	while (Display::currentDisplaysRunning > 0) {
-		timer++;
-	}
+	while (Display::currentDisplaysRunning > 0);
 
 	//Deletes from memory thread pointers
 	for (int i = 0; i < contextThread.getLength(); i++)

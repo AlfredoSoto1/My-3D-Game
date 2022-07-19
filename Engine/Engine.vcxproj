@@ -21,12 +21,16 @@
   <ItemGroup>
     <ClInclude Include="src\graphics\component\Display.h" />
     <ClInclude Include="src\exceptions\Error.h" />
+    <ClInclude Include="src\io\keyListener.h" />
+    <ClInclude Include="src\io\mouseListener.h" />
     <ClInclude Include="src\io\windowListener.h" />
     <ClInclude Include="src\structs\ArrayList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\component\Display.cpp" />
     <ClCompile Include="src\exceptions\Error.cpp" />
+    <ClCompile Include="src\io\keyListener.cpp" />
+    <ClCompile Include="src\io\mouseListener.cpp" />
     <ClCompile Include="src\io\windowListener.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
