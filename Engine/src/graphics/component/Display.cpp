@@ -125,7 +125,14 @@ void Display::setSize(int width, int height) {
 	this->height = height;
 	if (window == nullptr)
 		return;
+	hasResized = true;
 	glfwSetWindowSize(window, width, height);
+}
+
+void Display::setDimensions(int width, int height) {
+	this->width = width;
+	this->height = height;
+	hasResized = true;
 }
 
 void Display::setPosition(int x, int y) {
@@ -248,6 +255,21 @@ void Display::getDimensions(int* width, int* height) {
 	*height = this->height;
 }
 
+void Display::render(int isOnCallback) {
+	if (hasResized)
+		glViewport(0, 0, width, height);
+
+	if (update != nullptr)
+		update();
+
+	glfwSwapBuffers(window);
+	hasResized = false;
+
+	if(!isOnCallback)
+		glfwPollEvents();
+	processFrames();
+}
+
 void Display::renderDisplay() {
 
 	glfwSetWindowUserPointer(window, this);
@@ -259,28 +281,9 @@ void Display::renderDisplay() {
 		init();
 
 	while (!glfwWindowShouldClose(window)) {
-		if (hasResized)
-			glViewport(0, 0, width, height);
-
-		if (update != nullptr)
-			update();
-
-		//glClear(GL_COLOR_BUFFER_BIT);
-		//
-		//glBegin(GL_TRIANGLES);
-		//
-		//glVertex2f(-.5, 0.0);
-		//glVertex2f(.5, 0.0);
-		//glVertex2f(0.0, -.5);
-		//
-		//glEnd();
-
-		glfwSwapBuffers(window);
-		hasResized = false;
-
-		glfwPollEvents();
-		processFrames();
+		render(0);
 	}
+
 	if (dispose != nullptr)
 		dispose();
 

@@ -8,7 +8,7 @@
 #ifndef _GLFW_POINTERS_DEFINED
 #define _GLFW_POINTERS_DEFINED
 
-struct GLFWwindow;
+typedef struct GLFWwindow GLFWwindow;
 struct GLFWmonitor;
 
 #endif // !_GLFW_POINTERS_DEFINED
@@ -47,6 +47,7 @@ namespace graphics {
 		//display set funcitions
 		void setTitle(const char* title);
 		void setSize(int width, int height);
+		void setDimensions(int width, int height);
 		void setPosition(int x, int y);
 		void setVisible(bool isVisible);
 		void setTransparent(float transparency);
@@ -64,6 +65,10 @@ namespace graphics {
 		//return types
 		bool isDynamicallyUpdated();
 		void getDimensions(int* width, int* height);
+
+		//renders or refreshes display
+		//this function must be called inside a context
+		void render(int isOnCallback = 0);
 
 		//static functions
 		static void build();
@@ -106,13 +111,14 @@ namespace graphics {
 		bool isResizable = true;
 		bool isDecorated = true;
 		bool isFullscreen = false;
-		bool hasResized = false;
 		bool isRunning = false;
 		bool vsyncEnabled = true;
 		bool waiting = true;
 		bool hasInitiated = false;
 		bool failedToCreate = false;
+		bool hasResized = false;
 
+		//integrated functions
 		int(*init)();
 		int(*update)();
 		int(*dispose)();
@@ -129,6 +135,7 @@ namespace graphics {
 		void centerWindow();
 		bool initGLEW();
 
+		//functions
 		void processFrames();
 
 		static void run(Display* display);

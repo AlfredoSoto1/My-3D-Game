@@ -17,12 +17,12 @@ WindowListener::WindowListener(void* displayPtr) {
 		graphics::Display& displayPtr = *static_cast<graphics::Display*>(glfwGetWindowUserPointer(window));
 		displayPtr.setPosition(xpos, ypos);
 		if (displayPtr.isDynamicallyUpdated())
-			glfwSwapBuffers(window);
+			displayPtr.render(1);
 	};
 
 	auto sizeCallback = [](GLFWwindow* window, int width, int height) {
 		graphics::Display& displayPtr = *static_cast<graphics::Display*>(glfwGetWindowUserPointer(window));
-		displayPtr.setSize(width, height);
+		displayPtr.setDimensions(width, height);
 	};
 
 	auto closeCallback = [](GLFWwindow* window) {
@@ -52,7 +52,7 @@ WindowListener::WindowListener(void* displayPtr) {
 	auto refreshCallback = [](GLFWwindow* window) {
 		graphics::Display& displayPtr = *static_cast<graphics::Display*>(glfwGetWindowUserPointer(window));
 		if (displayPtr.isDynamicallyUpdated())
-			glfwSwapBuffers(window);
+			displayPtr.render(1);
 	};
 
 	//convert via operator overload Display to GLFWwindpw pointer

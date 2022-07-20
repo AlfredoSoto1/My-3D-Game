@@ -13,6 +13,7 @@ int main() {
 
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
 
+	window1->setDynamicUpdate(false);
 	window1->setFuntions(&init, &update, &dispose);
 
 	graphics::Display::build();
@@ -50,7 +51,7 @@ int dispose() {
 
 
 
-//
+
 //#define GLEW_STATIC
 //
 //#include <GL/glew.h>
@@ -59,37 +60,14 @@ int dispose() {
 //#include <iostream>
 //#include <thread>
 //
-//int stillRunning = 1;
+//GLFWwindow* window;
+//GLFWwindow* display;
 //
-//bool thread1Init = false;
+//int runningThreads = 2;
 //
-//void runningThread1() {
-//    GLFWwindow* window;
-//
-//    /* Initialize the library */
-//    if (!glfwInit())
-//        return;
-//
-//    /* Create a windowed mode window and its OpenGL context */
-//    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-//    if (!window)
-//    {
-//        glfwTerminate();
-//        return;
-//    }
-//
-//    /* Make the window's context current */
+//void run1() {
 //    glfwMakeContextCurrent(window);
-//
-//    if (glewInit() != GLEW_OK)
-//        std::cout << "Could not initiate glew!" << std::endl;
-//
-//    std::cout << glGetString(GL_VERSION) << std::endl;
-//    thread1Init = true;
-//
-//    /* Loop until the user closes the window */
-//    while (!glfwWindowShouldClose(window))
-//    {
+//    while (!glfwWindowShouldClose(window)) {
 //        /* Render here */
 //        glClear(GL_COLOR_BUFFER_BIT);
 //
@@ -99,9 +77,7 @@ int dispose() {
 //        glVertex2f(.5, 0.0);
 //        glVertex2f(0.0, -.5);
 //
-//
 //        glEnd();
-//
 //
 //        /* Swap front and back buffers */
 //        glfwSwapBuffers(window);
@@ -109,38 +85,12 @@ int dispose() {
 //        /* Poll for and process events */
 //        glfwPollEvents();
 //    }
-//    stillRunning--;
+//    runningThreads--;
 //}
 //
-//void runningThread2() {
-//    GLFWwindow* window;
-//
-//    while (!thread1Init);
-//
-//    /* Initialize the library */
-//    if (!glfwInit())
-//        return;
-//
-//    /* Create a windowed mode window and its OpenGL context */
-//    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-//    if (!window)
-//    {
-//        glfwTerminate();
-//        return;
-//    }
-//
-//    /* Make the window's context current */
-//    glfwMakeContextCurrent(window);
-//
-//    if (glewInit() != GLEW_OK)
-//        std::cout << "Could not initiate glew!" << std::endl;
-//
-//    std::cout << glGetString(GL_VERSION) << std::endl;
-//
-//
-//    /* Loop until the user closes the window */
-//    while (!glfwWindowShouldClose(window))
-//    {
+//void run2() {
+//    glfwMakeContextCurrent(display);
+//    while (!glfwWindowShouldClose(display)) {
 //        /* Render here */
 //        glClear(GL_COLOR_BUFFER_BIT);
 //
@@ -150,37 +100,68 @@ int dispose() {
 //        glVertex2f(.5, 0.0);
 //        glVertex2f(0.0, -.5);
 //
-//
 //        glEnd();
 //
-//
 //        /* Swap front and back buffers */
-//        try {
-//            glfwSwapBuffers(window);
-//        }
-//        catch (int numErr) {
-//            std::cout << "Ex thread 2: " << numErr << std::endl;
-//        }
+//        glfwSwapBuffers(display);
 //
 //        /* Poll for and process events */
 //        glfwPollEvents();
 //    }
-//    stillRunning--;
+//    runningThreads--;
 //}
 //
 //int main(void) {
 //
-//    std::thread* thread1 = new std::thread(&runningThread1);
-//    thread1->detach();
-//   /* std::thread* thread2 = new std::thread(&runningThread2);
-//    thread2->detach();*/
+//    /* Initialize the library */
+//    if (!glfwInit())
+//        return -1;
 //
-//    while (stillRunning > 0);
+//    /* Create a windowed mode window and its OpenGL context */
+//    window = glfwCreateWindow(640, 480, "Hello World 1", NULL, NULL);
+//    if (!window)
+//    {
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    if (!glfwInit())
+//        return -1;
+//
+//    /* Create a windowed mode window and its OpenGL context */
+//    display = glfwCreateWindow(640, 480, "Hello World 2", NULL, NULL);
+//    if (!display)
+//    {
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    /* Make the window's context current */
+//    //glfwMakeContextCurrent(window);
+//
+//    //if (glewInit() != GLEW_OK)
+//        //std::cout << "Could not initiate glew!" << std::endl;
+//
+//    //std::cout << glGetString(GL_VERSION) << std::endl;
+//
+//    //glfwMakeContextCurrent(display);
+//
+//    //if (glewInit() != GLEW_OK)
+//    //    std::cout << "Could not initiate glew!" << std::endl;
+//
+//    //std::cout << glGetString(GL_VERSION) << std::endl;
+//
+//    std::thread* thread1 = new std::thread(&run1);
+//    thread1->detach();
+//    std::thread* thread2 = new std::thread(&run2);
+//    thread2->detach();
+//
+//    while (runningThreads > 0)
+//    {
+//        //wait
+//    }
 //
 //    glfwTerminate();
-//
-//    delete thread1;
-//    //delete thread2;
 //
 //    return 0;
 //}
