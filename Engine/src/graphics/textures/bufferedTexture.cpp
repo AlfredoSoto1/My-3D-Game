@@ -7,8 +7,8 @@
 
 using namespace texture;
 
-BufferedTexture::BufferedTexture(unsigned int width, unsigned int height) : 
-width(width), height(height) {
+BufferedTexture::BufferedTexture(unsigned int width, unsigned int height, void* pixels) : 
+width(width), height(height), pixels(pixels) {
 	glGenTextures(1, &textureId);
 
 	create();
@@ -24,7 +24,7 @@ unsigned int BufferedTexture::getId() const {
 
 void BufferedTexture::create() {
 
-	minFilter = GL_NEAREST;// GL_LINEAR;
+	minFilter = GL_NEAREST;// GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR;
 	magFilter = GL_NEAREST;// GL_LINEAR;
 
 	textureWrap = GL_CLAMP_TO_EDGE;// GL_REPEAT; //GL_CLAMP_TO_EDGE;
@@ -36,6 +36,17 @@ void BufferedTexture::create() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 
+	if (minFilter == GL_NEAREST_MIPMAP_NEAREST || minFilter == GL_LINEAR_MIPMAP_LINEAR) {
+		glGenerateMipmap(GL_TEXTURE_2D);
+		if (anisotropicFilter != 0.0f) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -0.5f);
+		}
+		else {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0.0);
+		}
+		anisotropicFilterLevel();
+	}
+
 	if (textureWrap == GL_CLAMP_TO_BORDER) {
 		float param[4] = {0.0, 0.0, 0.0, 1.0};
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, param);
@@ -43,11 +54,6 @@ void BufferedTexture::create() {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrap);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrap);
-
-	if (minFilter == GL_NEAREST_MIPMAP_NEAREST || minFilter == GL_LINEAR_MIPMAP_LINEAR) {
-		glGenerateMipmap(GL_TEXTURE_2D);
-		anisotropicFilterLevel();
-	}
 
 	//simple image
 	char* pixels = new char[width * height * 4];
@@ -70,8 +76,6 @@ void BufferedTexture::create() {
 }
 
 void BufferedTexture::anisotropicFilterLevel() {
-	if (anisotropicFilter == 0.0f)
-		return;
 	if (GL_EXT_texture_filter_anisotropic == GL_TRUE) {
 		float anisotropy = anisotropicFilter;
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
@@ -81,6 +85,26 @@ void BufferedTexture::anisotropicFilterLevel() {
 	else {
 		std::cout << "Anisotropic Filtering not Compatible." << std::endl;
 	}
+}
+
+void BufferedTexture::setWrap(unsigned int wrap) {
+
+}
+
+void BufferedTexture::setFilter(unsigned int filter) {
+
+}
+
+void BufferedTexture::setMipmapLevel(float mipmapLevel) {
+
+}
+
+void BufferedTexture::setAnisotropicFilter(float anisotropicFilter) {
+
+}
+
+void BufferedTexture::setPixels(void* pixels) {
+
 }
 
 void BufferedTexture::bind(unsigned int slot) {

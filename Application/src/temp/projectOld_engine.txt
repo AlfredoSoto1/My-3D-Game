@@ -30,7 +30,6 @@
     <ClInclude Include="src\io\windowListener.h" />
     <ClInclude Include="src\structs\arrayList.h" />
     <ClInclude Include="src\structs\linkedList.h" />
-    <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\component\Display.cpp" />
@@ -41,7 +40,6 @@
     <ClCompile Include="src\io\keyListener.cpp" />
     <ClCompile Include="src\io\mouseListener.cpp" />
     <ClCompile Include="src\io\windowListener.cpp" />
-    <ClCompile Include="vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\graphics\shader\defaultFragment.shader" />
@@ -104,14 +102,6 @@
     <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\Engine\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\Engine\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\Engine\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>

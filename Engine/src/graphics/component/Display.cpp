@@ -1,4 +1,4 @@
-#include "Display.h"
+   #include "Display.h"
 
 #define MIN_WIDTH 320
 #define MIN_HEIGHT 180
@@ -14,7 +14,7 @@
 using namespace structs;
 using namespace graphics;
 
-int Display::currentDisplaysRunning = 0;
+volatile int Display::currentDisplaysRunning = 0;
 
 ArrayList<Display*> displayList;
 ArrayList<std::thread*> contextThread;

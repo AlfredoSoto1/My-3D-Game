@@ -56,7 +56,7 @@ public:
 
 
 		textureUniform = glGetUniformLocation(program, "u_texture");
-		texture = new texture::BufferedTexture(16, 16);
+		texture = new texture::BufferedTexture(16, 16, nullptr);
 	}
 
 	void render() {

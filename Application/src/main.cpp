@@ -1,4 +1,7 @@
 
+
+#include <iostream>
+
 #include "graphics/component/Display.h"
 
 #include "RendererTest.h"
@@ -29,6 +32,7 @@ int init() {
 
 	renderTest = new RendererTest();
 	renderTest->init();
+
 	return 0; //error code
 }
 
@@ -37,8 +41,8 @@ int update() {
 
 	//always clear buffer before render
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	renderTest->render();
+
 	return 0; //error code
 }
 
@@ -48,7 +52,16 @@ int dispose() {
 	return 0; //error code
 }
 
-
+//#include <Windows.h>
+//
+//std::string GetCurrentDirectory()
+//{
+//	char buffer[MAX_PATH];
+//	GetModuleFileNameA(NULL, buffer, MAX_PATH);
+//	std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+//
+//	return std::string(buffer).substr(0, pos);
+//}
 
 
 
