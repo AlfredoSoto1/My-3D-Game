@@ -19,7 +19,8 @@ namespace texture {
 		void setMipmapLevel(float mipmapLevel = 0.0f);
 		void setAnisotropicFilter(float anisotropicFilter = 0.0f);
 
-		void setPixels(void* pixels);
+		void setPixelData(void* pixels);
+		void getPixelData(void* pixels);
 
 		void bind(unsigned int slot = 0);
 		void unbind();
@@ -35,11 +36,16 @@ namespace texture {
 		unsigned int magFilter;
 		unsigned int textureWrap;
 
+		int internalFormat;
+		unsigned int format;
+
+		unsigned int type;
+
+		float mipmapLevel = 0.0f;
 		float anisotropicFilter = 0.0f;
 
-		void* pixels;
-
-		void create();
+		void initializeVariables();
+		void setTextureParameters();
 		void anisotropicFilterLevel();
 	};
 

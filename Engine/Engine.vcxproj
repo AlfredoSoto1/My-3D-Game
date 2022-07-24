@@ -23,13 +23,16 @@
     <ClInclude Include="src\exceptions\Error.h" />
     <ClInclude Include="src\graphics\geometry\mesh.h" />
     <ClInclude Include="src\graphics\geometry\model.h" />
+    <ClInclude Include="src\graphics\shader\defaultShaderSource.h" />
     <ClInclude Include="src\graphics\shader\shaderProgram.h" />
+    <ClInclude Include="src\graphics\textures\bufferedImage.h" />
     <ClInclude Include="src\graphics\textures\bufferedTexture.h" />
     <ClInclude Include="src\io\keyListener.h" />
     <ClInclude Include="src\io\mouseListener.h" />
     <ClInclude Include="src\io\windowListener.h" />
     <ClInclude Include="src\structs\arrayList.h" />
     <ClInclude Include="src\structs\linkedList.h" />
+    <ClInclude Include="src\structs\maths.h" />
     <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -37,15 +40,13 @@
     <ClCompile Include="src\exceptions\Error.cpp" />
     <ClCompile Include="src\graphics\geometry\mesh.cpp" />
     <ClCompile Include="src\graphics\shader\shaderProgram.cpp" />
+    <ClCompile Include="src\graphics\textures\bufferedImage.cpp" />
     <ClCompile Include="src\graphics\textures\bufferedTexture.cpp" />
     <ClCompile Include="src\io\keyListener.cpp" />
     <ClCompile Include="src\io\mouseListener.cpp" />
     <ClCompile Include="src\io\windowListener.cpp" />
+    <ClCompile Include="src\structs\maths.cpp" />
     <ClCompile Include="vendor\stb_image.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\graphics\shader\defaultFragment.shader" />
-    <None Include="src\graphics\shader\defaultVertex.shader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

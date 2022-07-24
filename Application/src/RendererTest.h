@@ -6,7 +6,9 @@
 #include "graphics/shader/shaderProgram.h"
 #include "graphics/textures/bufferedTexture.h"
 
-class RendererTest : shader::ShaderProgram {
+#include <stdlib.h>
+
+class RendererTest {
 public:
 
 	int textureUniform;
@@ -14,21 +16,27 @@ public:
 
 	geometry::Mesh* mesh;
 
-	int uniformId;
+	shader::Shader* rendererShader;
+	shader::Uniform* u_Color;
 
 	RendererTest() {
 
 	}
+
 	~RendererTest() {
 		dispose();
 	}
 
 	void init() {
 
+		const char* vert = "src/testV.shader";
+		const char* frag = "src/testF.shader";
 
-		createShader("src/testV.shader", "src/testF.shader", nullptr, nullptr);
+		const char* paths[2] = {vert, frag};
 
-		uniformId = glGetUniformLocation(program, "u_Color");
+		rendererShader = new shader::Shader(2, paths);
+
+		u_Color = new shader::Uniform("u_Color", *rendererShader);
 
 		unsigned int indices[6] = {
 			0, 1, 2,
@@ -54,17 +62,30 @@ public:
 		mesh->createAttribute(0, 2, 4, positions, GL_FLOAT);
 		mesh->createAttribute(1, 2, 4, textureCoords, GL_FLOAT);
 
+		int width = 64;
+		int height = 64;
+		char* pixels = new char[width * height * 4];
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				pixels[(x + y * width) * 4 + 0] = rand() % 255;
+				pixels[(x + y * width) * 4 + 1] = rand() % 255;
+				pixels[(x + y * width) * 4 + 2] = rand() % 255;
+				pixels[(x + y * width) * 4 + 3] = 255;
+			}
+		}
 
-		textureUniform = glGetUniformLocation(program, "u_texture");
-		texture = new texture::BufferedTexture(16, 16, nullptr);
-	}
+		textureUniform = glGetUniformLocation(*rendererShader, "u_texture");
+		texture = new texture::BufferedTexture(width, height, pixels);
+
+		delete[] pixels;
+	} 
 
 	void render() {
 
-		glUseProgram(program);
+		rendererShader->onProgram();
 
-		glUniform4f(uniformId, 1.0, 0.0, 0.0, 1.0);
-
+		//setting uniform variable values
+		u_Color->setFloat4(1.0f, 0.0, 0.0, 1.0);
 
 
 		texture->bind(0);
@@ -75,12 +96,14 @@ public:
 		glDrawElements(GL_TRIANGLES, mesh->getIndexCount(), GL_UNSIGNED_INT, nullptr);
 		mesh->unbind();
 
-		glUseProgram(0);
+		rendererShader->offProgram();
 	}
 
 	void dispose() {
 		delete texture;
 		delete mesh;
+		delete rendererShader;
+		delete u_Color;
 	}
 
 private:
