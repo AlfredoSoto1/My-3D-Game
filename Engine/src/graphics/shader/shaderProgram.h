@@ -34,7 +34,7 @@ namespace shader {
 
 	class Uniform {
 	public:
-		Uniform(const std::string& variableName, unsigned int shaderProgram);
+		Uniform(unsigned int shaderProgram, const std::string& variableName);
 
 		void setFloat1(const float& x);
 		void setFloat2(const float& x, const float& y);
@@ -57,6 +57,16 @@ namespace shader {
 		void setUInt4(const unsigned int& x, const unsigned int& y, const unsigned int& z, const unsigned int& w);
 
 	private:
+		int location;
+		unsigned int shaderProgram;
+	};
+
+	class TextureSampler {
+	public:
+		TextureSampler(int slot, unsigned int shaderProgram, const std::string& variableName);
+
+	private:
+		int slot;
 		int location;
 		unsigned int shaderProgram;
 	};

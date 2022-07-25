@@ -164,9 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RendererTest.h" />
-    <ClInclude Include="src\RendererTestShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\testCompute.shader" />
     <None Include="src\testF.shader" />
     <None Include="src\testV.shader" />
   </ItemGroup>

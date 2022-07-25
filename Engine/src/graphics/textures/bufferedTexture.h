@@ -10,6 +10,7 @@ namespace texture {
 	public:
 
 		BufferedTexture(unsigned int width, unsigned int height, void* pixels);
+		BufferedTexture(unsigned int width, unsigned int height, int slot, void* pixels);
 		~BufferedTexture();
 
 		unsigned int getId() const;
@@ -22,7 +23,7 @@ namespace texture {
 		void setPixelData(void* pixels);
 		void getPixelData(void* pixels);
 
-		void bind(unsigned int slot = 0);
+		void bind(int slot = 0);
 		void unbind();
 
 	private:
@@ -40,6 +41,8 @@ namespace texture {
 		unsigned int format;
 
 		unsigned int type;
+
+		int slot = -1;
 
 		float mipmapLevel = 0.0f;
 		float anisotropicFilter = 0.0f;

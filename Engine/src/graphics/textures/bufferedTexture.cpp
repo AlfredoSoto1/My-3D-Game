@@ -22,6 +22,21 @@ width(width), height(height) {
 	error::glCheckError();
 }
 
+BufferedTexture::BufferedTexture(unsigned int width, unsigned int height, int slot, void* pixels) :
+	width(width), height(height), slot(slot) {
+	glGenTextures(1, &textureId);
+
+	initializeVariables();
+
+	error::glClearError();
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	setTextureParameters();
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, (void*)pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	error::glCheckError();
+}
+
 BufferedTexture::~BufferedTexture() {
 	glDeleteTextures(1, &textureId);
 }
@@ -111,8 +126,11 @@ void BufferedTexture::getPixelData(void* pixels) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void BufferedTexture::bind(unsigned int slot) {
-	glActiveTexture(GL_TEXTURE0 + slot);
+void BufferedTexture::bind(int slot) {
+	if(this->slot < 0)
+		glActiveTexture(GL_TEXTURE0 + slot);
+	else
+		glActiveTexture(GL_TEXTURE0 + this->slot);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 

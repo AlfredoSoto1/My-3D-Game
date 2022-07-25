@@ -140,7 +140,7 @@ unsigned int Shader::compileShader(unsigned int type, const std::string& shaderS
 }
 
 
-Uniform::Uniform(const std::string& variableName, unsigned int shaderProgram) :
+Uniform::Uniform(unsigned int shaderProgram, const std::string& variableName) :
 	shaderProgram(shaderProgram)
 {
 	location = glGetUniformLocation(shaderProgram, variableName.c_str());
@@ -208,4 +208,14 @@ void Uniform::setUInt3(const unsigned int& x, const unsigned int& y, const unsig
 
 void Uniform::setUInt4(const unsigned int& x, const unsigned int& y, const unsigned int& z, const unsigned int& w) {
 	glUniform4i(location, x, y, z, w);
+}
+
+TextureSampler::TextureSampler(int slot, unsigned int shaderProgram, const std::string& variableName) :
+	shaderProgram(shaderProgram)
+{
+	location = glGetUniformLocation(shaderProgram, variableName.c_str());
+
+	glUseProgram(shaderProgram);
+	glUniform1i(location, slot);
+	glUseProgram(0);
 }

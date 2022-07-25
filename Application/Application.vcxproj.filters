@@ -23,12 +23,10 @@
     <ClInclude Include="src\RendererTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\RendererTestShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\testF.shader" />
     <None Include="src\testV.shader" />
+    <None Include="src\testCompute.shader" />
   </ItemGroup>
 </Project>
