@@ -14,6 +14,8 @@ namespace texture {
 		~BufferedTexture();
 
 		unsigned int getId() const;
+		unsigned int getFormat() const;
+		int getInternalFormat() const;
 
 		void setWrap(unsigned int wrap);
 		void setFilter(unsigned int filter);

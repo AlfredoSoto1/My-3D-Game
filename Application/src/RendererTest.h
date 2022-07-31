@@ -20,8 +20,8 @@ public:
 	shader::TextureSampler* s_texture;
 
 	shader::Shader* computeShader;
-	unsigned int computeTexture;
-	//unsigned int shaderStorageBuffer;
+	shader::StorageBuffer* storageBuffer;
+	shader::ImageBuffer* imageBuffer;
 
 	RendererTest() {
 
@@ -48,10 +48,10 @@ public:
 		};
 
 		float positions[8] = {
-			-0.5f, -0.5f,
-			 0.5f, -0.5f,
-			 0.5f,  0.5f,
-			-0.5f,  0.5f
+			-1.0f, -1.0f,
+			 1.0f, -1.0f,
+			 1.0f,  1.0f,
+			-1.0f,  1.0f
 		};
 
 		float textureCoords[8] = {
@@ -66,8 +66,8 @@ public:
 		mesh->createAttribute(0, 2, 4, positions, GL_FLOAT);
 		mesh->createAttribute(1, 2, 4, textureCoords, GL_FLOAT);
 
-		int width = 64;
-		int height = 64;
+		int width = 1280;
+		int height = 720;
 		char* pixels = new char[width * height * 4];
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -86,68 +86,47 @@ public:
 		//compute shader init
 
 		const char* comp = "src/testCompute.shader";
-		const char* computePath[1] = {comp};
-		computeShader = new shader::Shader(1, computePath);
+		const char* shaderPath[1] = {comp};
+		computeShader = new shader::Shader(1, shaderPath);
 
-		//generate shader storage buffer id
-		//glGenBuffers(1, &shaderStorageBuffer);
-
-		int tex_w = 64, tex_h = 64;
-		glGenTextures(1, &computeTexture);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, computeTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex_w, tex_h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-			NULL);
-		glBindImageTexture(0, computeTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
-
-		//glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
-		//glBindImageTexture(0/*location*/, texture->getId(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
-
-		//bind and store data
-		//glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);//bind
-		//glBufferData(GL_SHADER_STORAGE_BUFFER, 0, (void*)0, GL_DYNAMIC_DRAW);
-		//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0/*Bind location*/, shaderStorageBuffer);
-		//glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);//unbind
+		imageBuffer = new shader::ImageBuffer(0, texture->getId(), texture->getInternalFormat());
+		imageBuffer->bindImageBuffer();
+		
+		float data[4] = {1.0, 0.0, 1.0, 1.0};
+		storageBuffer = new shader::StorageBuffer(0, sizeof(data), data);
 	} 
 
 	void render() {
 
-		//update data inserted first time  --before shader start
-		//glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
-		//glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0/*offset*/, 0, (void*)0);
-		//glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+		/*
+			Compute Shader using shader storage buffer objects
+		*/
 
-		computeShader->onProgram();
+		storageBuffer->bind();
+		computeShader->dispatch(1280 / 16, 720 / 16, 1, GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT);
+		storageBuffer->unbind();
 
-		glDispatchCompute(64, 64, 1);
-		//glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+		/*
+			traditional rendering strategy
+		*/
 
-		computeShader->offProgram();
-
-		//read data from shader --after shader ends
-		//glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
-		//glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0/*offset*/, 0, (void*)0);
-		//glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
-
+		//shartShader Program
 		rendererShader->onProgram();
-		//setting uniform variable values
-		//u_Color->setFloat4(1.0f, 0.0, 0.0, 1.0);
 
-		//texture->bind(0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, computeTexture);
+		//load uniform value
+		u_Color->setFloat4(1.0f, 0.0, 0.0, 1.0);
 
+		//bind texture
+		texture->bind(0);
+
+		//bind mesh
 		mesh->bind();
 
+		//render/draw
 		glDrawElements(GL_TRIANGLES, mesh->getIndexCount(), GL_UNSIGNED_INT, nullptr);
+		
 		mesh->unbind();
-
+		texture->unbind();
 		rendererShader->offProgram();
 	}
 
@@ -158,10 +137,11 @@ public:
 		delete computeShader;
 		delete u_Color;
 		delete s_texture;
-
-		//glDeleteBuffers(1, &shaderStorageBuffer);
+		delete storageBuffer;
+		delete imageBuffer;
 	}
 
 private:
 
 };
+

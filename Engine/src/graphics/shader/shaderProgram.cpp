@@ -1,18 +1,17 @@
 #include "shaderProgram.h"
 
-#define _DEFAULT_SHADER_SOURCE
-#include "defaultShaderSource.h"
-
 #include <GL/glew.h>
 #include <fstream>
 #include <sstream>
 #include <malloc.h>
 #include <iostream>
 
+#include "../textures/bufferedTexture.h"
+
 using namespace shader;
 
-Shader::Shader(unsigned int pathCount, const char** shaderPaths) :
-	pathCount(pathCount)
+Shader::Shader(unsigned int pathCount, const char** shaderPaths)
+	: pathCount(pathCount)
 {
 	program = glCreateProgram();
 
@@ -26,6 +25,18 @@ Shader::Shader(unsigned int pathCount, const char** shaderPaths) :
 			shaderIds[i] = compileShader(type, shaderSource[i]);
 			glAttachShader(program, shaderIds[i]);
 		}
+	}
+
+	if (type == GL_COMPUTE_SHADER && pathCount == 1) {
+		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &workGroupMaxCount[0]);
+		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &workGroupMaxCount[1]);
+		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &workGroupMaxCount[2]);
+
+		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &workGroupMaxSize[0]);
+		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &workGroupMaxSize[1]);
+		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &workGroupMaxSize[2]);
+
+		glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &workGroupInvocations);
 	}
 	
 	if (pathCount == 0)
@@ -53,6 +64,17 @@ void Shader::onProgram() {
 }
 
 void Shader::offProgram() {
+	glUseProgram(0);
+}
+
+void Shader::dispatch(int groupX, int groupY, int groupZ, int barrier) {
+	glUseProgram(program);
+	glDispatchCompute(
+		groupX > workGroupMaxCount[0] ? workGroupMaxCount[0] : groupX,
+		groupY > workGroupMaxCount[1] ? workGroupMaxCount[1] : groupY,
+		groupZ > workGroupMaxCount[2] ? workGroupMaxCount[2] : groupZ);
+
+	glMemoryBarrier(barrier);
 	glUseProgram(0);
 }
 
@@ -139,6 +161,9 @@ unsigned int Shader::compileShader(unsigned int type, const std::string& shaderS
 	return shaderId;
 }
 
+/*
+	Uniform
+*/
 
 Uniform::Uniform(unsigned int shaderProgram, const std::string& variableName) :
 	shaderProgram(shaderProgram)
@@ -210,6 +235,10 @@ void Uniform::setUInt4(const unsigned int& x, const unsigned int& y, const unsig
 	glUniform4i(location, x, y, z, w);
 }
 
+/*
+	Texture Sampler Uniform
+*/
+
 TextureSampler::TextureSampler(int slot, unsigned int shaderProgram, const std::string& variableName) :
 	shaderProgram(shaderProgram)
 {
@@ -218,4 +247,56 @@ TextureSampler::TextureSampler(int slot, unsigned int shaderProgram, const std::
 	glUseProgram(shaderProgram);
 	glUniform1i(location, slot);
 	glUseProgram(0);
+}
+
+/*
+	Image Buffer
+*/
+
+ImageBuffer::ImageBuffer(unsigned int imageOffset, unsigned int textureId, int internalFormat) 
+	: imageOffset(imageOffset), textureId(textureId), internalFormat(internalFormat)
+{
+
+}
+
+ImageBuffer::~ImageBuffer() {
+
+}
+
+void ImageBuffer::bindImageBuffer() {
+	glBindImageTexture(imageOffset, textureId, 0, GL_FALSE, 0, GL_WRITE_ONLY, internalFormat);
+}
+
+/*
+	Storage Buffer Object
+*/
+
+StorageBuffer::StorageBuffer(int bindingOffset, unsigned int size, void* data)
+	: bindingOffset(bindingOffset)
+{
+	glGenBuffers(1, &ssboId);
+	bind();
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, bindingOffset, ssboId);
+	unbind();
+}
+
+StorageBuffer::~StorageBuffer() {
+	glDeleteBuffers(1, &ssboId);
+}
+
+void StorageBuffer::setData(void* data, int bindingOffset) {
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, bindingOffset, sizeof(data), data);
+}
+
+void StorageBuffer::getData(void* data, int bindingOffset) {
+	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, bindingOffset, sizeof(data), data);
+}
+
+void StorageBuffer::bind() {
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboId);
+}
+
+void StorageBuffer::unbind() {
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }

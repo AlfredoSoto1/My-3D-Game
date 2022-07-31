@@ -45,6 +45,14 @@ unsigned int BufferedTexture::getId() const {
 	return textureId;
 }
 
+unsigned int BufferedTexture::getFormat() const {
+	return format;
+}
+
+int BufferedTexture::getInternalFormat() const {
+	return internalFormat;
+}
+
 void BufferedTexture::setWrap(unsigned int wrap) {
 	this->textureWrap = wrap;
 }

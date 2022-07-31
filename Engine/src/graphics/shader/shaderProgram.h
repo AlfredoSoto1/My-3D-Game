@@ -10,6 +10,10 @@
 
 #include <string>
 
+namespace texture {
+	class BufferedTexture;
+}
+
 namespace shader {
 
 	class Shader {
@@ -19,17 +23,29 @@ namespace shader {
 
 		void onProgram();
 		void offProgram();
+
+		void dispatch(int groupX, int groupY, int groupZ, int barrier);
 		
 		operator unsigned int();
+
 	private:
 		unsigned int program;
 		unsigned int pathCount;
 		unsigned int* shaderIds;
 
+		int workGroupMaxSize[3];
+		int workGroupMaxCount[3];
+
+		int workGroupInvocations;
+
+		bool hasDataToCompute = false;
+		bool hasImageToCompute = false;
+
 		std::string* shaderSource;
 
 		unsigned int compileShader(unsigned int type, const std::string& source);
 		void parseShaderToSource(const char* shaderPath, std::string* shaderSource, unsigned int* type);
+
 	};
 
 	class Uniform {
@@ -64,12 +80,42 @@ namespace shader {
 	class TextureSampler {
 	public:
 		TextureSampler(int slot, unsigned int shaderProgram, const std::string& variableName);
-
 	private:
 		int slot;
 		int location;
 		unsigned int shaderProgram;
 	};
+
+	class ImageBuffer {
+	public:
+		ImageBuffer(unsigned int imageOffset, unsigned int textureId, int internalFormat);
+		~ImageBuffer();
+
+		void bindImageBuffer();
+
+	private:
+		unsigned int imageOffset;
+		unsigned int textureId;
+		int internalFormat;
+	};
+
+	class StorageBuffer {
+	public:
+		StorageBuffer(int bindingOffset, unsigned int size, void* data);
+		~StorageBuffer();
+
+		void setData(void* data, int bindingOffset = 0);
+		void getData(void* data, int bindingOffset = 0);
+
+		void bind();
+		void unbind();
+
+	private:
+		int bindingOffset;
+		unsigned int ssboId;
+
+	};
+
 }
 
 #endif // !_SHADER_PROGRAM_DEFINED

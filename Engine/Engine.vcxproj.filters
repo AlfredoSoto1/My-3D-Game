@@ -54,9 +54,6 @@
     <ClInclude Include="src\graphics\shader\shaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\shader\defaultShaderSource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\structs\maths.h">
       <Filter>Header Files</Filter>
     </ClInclude>

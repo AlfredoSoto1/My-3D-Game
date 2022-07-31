@@ -23,7 +23,6 @@
     <ClInclude Include="src\exceptions\Error.h" />
     <ClInclude Include="src\graphics\geometry\mesh.h" />
     <ClInclude Include="src\graphics\geometry\model.h" />
-    <ClInclude Include="src\graphics\shader\defaultShaderSource.h" />
     <ClInclude Include="src\graphics\shader\shaderProgram.h" />
     <ClInclude Include="src\graphics\textures\bufferedImage.h" />
     <ClInclude Include="src\graphics\textures\bufferedTexture.h" />
