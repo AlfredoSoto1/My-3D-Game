@@ -14,6 +14,7 @@ namespace scene {
 		maths::structs::vec3 rotation;
 		maths::structs::vec3 direction;
 
+		maths::structs::mat4 viewMatrix;
 		maths::structs::mat4 projectionMatrix;
 
 		Camera();
@@ -22,6 +23,9 @@ namespace scene {
 		void update();
 
 	private:
+		float fov = 45.0f; 
+		float nearPlane = 0.1f;
+		float farPlane = 1000.0f;
 
 	};
 

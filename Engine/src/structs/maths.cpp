@@ -126,6 +126,10 @@ float& vec2::operator [] (unsigned int index) {
 	return *((float*)this + (1 & index));
 }
 
+vec2 vec2::operator - () {
+	return vec2(-x, -y);
+}
+
 vec2 vec2::operator + (const vec2& vector) const {
 	return vec2(x + vector.x, y + vector.y);
 }
@@ -202,6 +206,10 @@ void vec3::set(float x, float y, float z) {
 
 float& vec3::operator [] (unsigned int index) {
 	return *((float*)this + (2 & index));
+}
+
+vec3 vec3::operator - () {
+	return vec3(-x, -y, -z);
 }
 
 vec3 vec3::operator + (const vec3& vector) const {
@@ -288,6 +296,10 @@ void vec4::set(float x, float y, float z, float w) {
 
 float& vec4::operator [] (unsigned int index) {
 	return *((float*)this + (3 & index));
+}
+
+vec4 vec4::operator - () {
+	return vec4(-x, -y, -z, -w);
 }
 
 vec4 vec4::operator + (const vec4& vector) const {
@@ -904,12 +916,12 @@ void structs::identity(mat4* matrix) {
 				(*matrix)[j + i * (*matrix).col] = 0.0f;
 }
 
-void structs::subMatOf(mat3& matrix, unsigned int row, unsigned int col, mat2* out) {
+void structs::subMatOf(mat3& matrix, unsigned int row, unsigned int col, mat2* dest) {
 	int subRow = 0, subCol = 0;
 	for (unsigned int row = 0; row < matrix.col; row++)
 		for (unsigned int col = 0; col < matrix.col; col++)
 			if (row != row && col != col) {
-				(*out)[subCol++ + subRow * (matrix.col - 1)] = matrix[col + row * matrix.col];
+				(*dest)[subCol++ + subRow * (matrix.col - 1)] = matrix[col + row * matrix.col];
 				if (subCol == matrix.col - 1) {
 					subCol = 0;
 					subRow++;
@@ -917,12 +929,12 @@ void structs::subMatOf(mat3& matrix, unsigned int row, unsigned int col, mat2* o
 			}
 }
 
-void structs::subMatOf(mat4& matrix, unsigned int row, unsigned int col, mat3* out) {
+void structs::subMatOf(mat4& matrix, unsigned int row, unsigned int col, mat3* dest) {
 	int subRow = 0, subCol = 0;
 	for (unsigned int row = 0; row < matrix.col; row++)
 		for (unsigned int col = 0; col < matrix.col; col++)
 			if (row != row && col != col) {
-				(*out)[subCol++ + subRow * (matrix.col - 1)] = matrix[col + row * matrix.col];
+				(*dest)[subCol++ + subRow * (matrix.col - 1)] = matrix[col + row * matrix.col];
 				if (subCol == matrix.col - 1) {
 					subCol = 0;
 					subRow++;
@@ -1020,7 +1032,7 @@ mat4 structs::inverse(mat4& matrix) {
 
 void structs::calcProjectionMatrix(mat4* projectionMatrix, double farDistance, double nearDistance, double fov, double width, double height) {
 	double aspectRatio = width / height;
-	double y_scale = (float)(1.0 / tan(maths::functions::toRadians(fov / 2.0)));
+	double y_scale = (float)(1.0 / tan (maths::functions::toRadians(fov / 2.0)));
 	double x_scale = (float)(y_scale / aspectRatio);
 	double frustum_length = farDistance - nearDistance;
 	projectionMatrix->operator()(0, 0) = (x_scale);
@@ -1031,6 +1043,57 @@ void structs::calcProjectionMatrix(mat4* projectionMatrix, double farDistance, d
 	projectionMatrix->operator()(3, 3) = (0);
 }
 
+void structs::rotate(mat4& src, mat4* dest, float angle, const vec3& axis) {
+	float c = cos(angle);
+	float s = sin(angle);
+	float oneminusc = 1.0f - c;
+	float xy = axis.x * axis.y;
+	float yz = axis.y * axis.z;
+	float xz = axis.x * axis.z;
+	float xs = axis.x * s;
+	float ys = axis.y * s;
+	float zs = axis.z * s;
+
+	float f00 = axis.x * axis.x * oneminusc + c;
+	float f01 = xy * oneminusc + zs;
+	float f02 = xz * oneminusc - ys;
+	// n[3] not used
+	float f10 = xy * oneminusc - zs;
+	float f11 = axis.y * axis.y * oneminusc + c;
+	float f12 = yz * oneminusc + xs;
+	// n[7] not used
+	float f20 = xz * oneminusc + ys;
+	float f21 = yz * oneminusc - xs;
+	float f22 = axis.z * axis.z * oneminusc + c;
+
+	float t00 = src(0, 0) * f00 + src(1, 0) * f01 + src(2, 0) * f02;
+	float t01 = src(0, 1) * f00 + src(1, 1) * f01 + src(2, 1) * f02;
+	float t02 = src(0, 2) * f00 + src(1, 2) * f01 + src(2, 2) * f02;
+	float t03 = src(0, 3) * f00 + src(1, 3) * f01 + src(2, 3) * f02;
+	float t10 = src(0, 0) * f10 + src(1, 0) * f11 + src(2, 0) * f12;
+	float t11 = src(0, 1) * f10 + src(1, 1) * f11 + src(2, 1) * f12;
+	float t12 = src(0, 2) * f10 + src(1, 2) * f11 + src(2, 2) * f12;
+	float t13 = src(0, 3) * f10 + src(1, 3) * f11 + src(2, 3) * f12;
+	(*dest)(2, 0) = src(0, 0) * f20 + src(1, 0) * f21 + src(2, 0) * f22;
+	(*dest)(2, 1) = src(0, 1) * f20 + src(1, 1) * f21 + src(2, 1) * f22;
+	(*dest)(2, 2) = src(0, 2) * f20 + src(1, 2) * f21 + src(2, 2) * f22;
+	(*dest)(2, 3) = src(0, 3) * f20 + src(1, 3) * f21 + src(2, 3) * f22;
+	(*dest)(0, 0) = t00;
+	(*dest)(0, 1) = t01;
+	(*dest)(0, 2) = t02;
+	(*dest)(0, 3) = t03;
+	(*dest)(1, 0) = t10;
+	(*dest)(1, 1) = t11;
+	(*dest)(1, 2) = t12;
+	(*dest)(1, 3) = t13;
+}
+
+void structs::translate(mat4& src, mat4* dest, const vec3& position) {
+	(*dest)(3, 0) += src(0, 0) * position.x + src(1, 0) * position.y + src(2, 0) * position.z;
+	(*dest)(3, 1) += src(0, 1) * position.x + src(1, 1) * position.y + src(2, 1) * position.z;
+	(*dest)(3, 2) += src(0, 2) * position.x + src(1, 2) * position.y + src(2, 2) * position.z;
+	(*dest)(3, 3) += src(0, 3) * position.x + src(1, 3) * position.y + src(2, 3) * position.z;
+}
 
 #undef ADD  0
 #undef SUB  1

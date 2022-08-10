@@ -47,6 +47,8 @@ namespace maths {
 
 			float& operator [] (unsigned int index);
 
+			vec2 operator - ();
+
 			vec2 operator + (const vec2& vector) const;
 			vec2 operator - (const vec2& vector) const;
 			vec2 operator * (const float factor) const;
@@ -77,6 +79,8 @@ namespace maths {
 			void set(float x, float y, float z);
 
 			float& operator [] (unsigned int index);
+
+			vec3 operator - ();
 
 			vec3 operator + (const vec3& vector) const;
 			vec3 operator - (const vec3& vector) const;
@@ -111,6 +115,8 @@ namespace maths {
 			void set(float x, float y, float z, float w);
 
 			float& operator [] (unsigned int index);
+
+			vec4 operator - ();
 
 			vec4 operator + (const vec4& vector) const;
 			vec4 operator - (const vec4& vector) const;
@@ -288,8 +294,8 @@ namespace maths {
 		void identity(mat3* matrix);
 		void identity(mat4* matrix);
 
-		void subMatOf(mat3& matrix, unsigned int row, unsigned int col, mat2* out);
-		void subMatOf(mat4& matrix, unsigned int row, unsigned int col, mat3* out);
+		void subMatOf(mat3& matrix, unsigned int row, unsigned int col, mat2* dest);
+		void subMatOf(mat4& matrix, unsigned int row, unsigned int col, mat3* dest);
 
 		float determinantOf(mat2& matrix);
 		float determinantOf(mat3& matrix);
@@ -302,6 +308,9 @@ namespace maths {
 		mat2 inverse(mat2& matrix);
 		mat3 inverse(mat3& matrix);
 		mat4 inverse(mat4& matrix);
+
+		void rotate(mat4& src, mat4* dest, float angle, const vec3& axis);
+		void translate(mat4& src, mat4* dest, const vec3& position);
 
 		void calcProjectionMatrix(mat4* projectionMatrix, double farDistance, double nearDistance, double fov, double width, double height);
 

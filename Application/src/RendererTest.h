@@ -20,6 +20,7 @@ public:
 	shader::Shader* rendererShader;
 	shader::Uniform* u_Color;
 	shader::Uniform* u_projectionMatrix;
+	shader::Uniform* u_viewMatrix;
 	shader::TextureSampler* s_texture;
 
 	scene::Camera* camera;
@@ -43,6 +44,7 @@ public:
 
 		u_Color = new shader::Uniform(*rendererShader, "u_Color");
 		u_projectionMatrix = new shader::Uniform(*rendererShader, "projectionMatrix");
+		u_viewMatrix = new shader::Uniform(*rendererShader, "viewMatrix");
 
 		unsigned int indices[6] = {
 			0, 1, 2,
@@ -104,8 +106,8 @@ public:
 		//load uniform value
 		u_Color->setFloat4(1.0f, 0.0, 0.0, 1.0);
 
-
 		u_projectionMatrix->setMatrix4f(camera->projectionMatrix);
+		u_viewMatrix->setMatrix4f(camera->viewMatrix);
 
 		//bind texture
 		texture->bind(0);
@@ -127,6 +129,7 @@ public:
 		delete rendererShader;
 		delete u_Color;
 		delete u_projectionMatrix;
+		delete u_viewMatrix;
 		delete s_texture;
 
 		delete camera;
