@@ -1100,3 +1100,5 @@ void structs::translate(mat4& src, mat4* dest, const vec3& position) {
 #undef MUL  2
 #undef DIV  3
 #undef mMUL 4
+
+//references : https://github.com/LWJGL/lwjgl/blob/master/src/java/org/lwjgl/util/vector/Matrix4f.java
