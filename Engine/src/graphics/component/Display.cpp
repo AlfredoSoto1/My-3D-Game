@@ -109,6 +109,10 @@ void Display::centerCursorOnLaunch() {
 	isCursorCentered = true;
 }
 
+volatile bool Display::resized() {
+	return hasResized;
+}
+
 /*
 	set Display function propeties
 */
@@ -271,7 +275,6 @@ void Display::render(int isOnCallback) {
 }
 
 void Display::renderDisplay() {
-
 	glfwSetWindowUserPointer(window, this);
 	this->windowListener = new listener::WindowListener(this);
 	this->mouseListener = new listener::MouseListener(this);

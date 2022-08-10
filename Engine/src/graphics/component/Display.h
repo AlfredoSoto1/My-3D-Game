@@ -44,6 +44,8 @@ namespace graphics {
 		void requestAttention();
 		void centerCursorOnLaunch();
 
+		volatile bool resized();
+
 		//display set funcitions
 		void setTitle(const char* title);
 		void setSize(int width, int height);
@@ -82,7 +84,7 @@ namespace graphics {
 		const char* title;
 
 		int idLocation;
-
+		 
 		int xpos, ypos;
 		int width, height;
 

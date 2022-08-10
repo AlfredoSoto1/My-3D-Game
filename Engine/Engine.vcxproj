@@ -29,6 +29,7 @@
     <ClInclude Include="src\io\keyListener.h" />
     <ClInclude Include="src\io\mouseListener.h" />
     <ClInclude Include="src\io\windowListener.h" />
+    <ClInclude Include="src\scene\camera.h" />
     <ClInclude Include="src\structs\arrayList.h" />
     <ClInclude Include="src\structs\linkedList.h" />
     <ClInclude Include="src\structs\maths.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="src\io\keyListener.cpp" />
     <ClCompile Include="src\io\mouseListener.cpp" />
     <ClCompile Include="src\io\windowListener.cpp" />
+    <ClCompile Include="src\scene\camera.cpp" />
     <ClCompile Include="src\structs\maths.cpp" />
     <ClCompile Include="vendor\stb_image.cpp" />
   </ItemGroup>

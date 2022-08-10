@@ -1,10 +1,12 @@
 #pragma once
 
-
 #include <GL/glew.h>
 #include "graphics/geometry/mesh.h"
 #include "graphics/shader/shaderProgram.h"
 #include "graphics/textures/bufferedTexture.h"
+#include "scene/camera.h"
+
+#include "structs/maths.h"
 
 #include <stdlib.h>
 
@@ -17,11 +19,10 @@ public:
 
 	shader::Shader* rendererShader;
 	shader::Uniform* u_Color;
+	shader::Uniform* u_projectionMatrix;
 	shader::TextureSampler* s_texture;
 
-	shader::Shader* computeShader;
-	shader::StorageBuffer* storageBuffer;
-	shader::ImageBuffer* imageBuffer;
+	scene::Camera* camera;
 
 	RendererTest() {
 
@@ -33,14 +34,15 @@ public:
 
 	void init() {
 
-		const char* vert = "src/testV.shader";
-		const char* frag = "src/testF.shader";
+		const char* vert = "src/testV.glsl";
+		const char* frag = "src/testF.glsl";
 
 		const char* paths[2] = {vert, frag};
 
 		rendererShader = new shader::Shader(2, paths);
 
 		u_Color = new shader::Uniform(*rendererShader, "u_Color");
+		u_projectionMatrix = new shader::Uniform(*rendererShader, "projectionMatrix");
 
 		unsigned int indices[6] = {
 			0, 1, 2,
@@ -48,10 +50,10 @@ public:
 		};
 
 		float positions[8] = {
-			-1.0f, -1.0f,
-			 1.0f, -1.0f,
-			 1.0f,  1.0f,
-			-1.0f,  1.0f
+			-0.5f, -0.5f,
+			 0.5f, -0.5f,
+			 0.5f,  0.5f,
+			-0.5f,  0.5f
 		};
 
 		float textureCoords[8] = {
@@ -66,8 +68,8 @@ public:
 		mesh->createAttribute(0, 2, 4, positions, GL_FLOAT);
 		mesh->createAttribute(1, 2, 4, textureCoords, GL_FLOAT);
 
-		int width = 1280;
-		int height = 720;
+		int width = 16;
+		int height = 16;
 		char* pixels = new char[width * height * 4];
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -80,31 +82,17 @@ public:
 
 		texture = new texture::BufferedTexture(width, height, pixels);
 		s_texture = new shader::TextureSampler(0, *rendererShader, "u_texture");
-
 		delete[] pixels;
 
-		//compute shader init
 
-		const char* comp = "src/testCompute.shader";
-		const char* shaderPath[1] = {comp};
-		computeShader = new shader::Shader(1, shaderPath);
-
-		imageBuffer = new shader::ImageBuffer(0, texture->getId(), texture->getInternalFormat());
-		imageBuffer->bindImageBuffer();
-		
-		float data[4] = {1.0, 0.0, 1.0, 1.0};
-		storageBuffer = new shader::StorageBuffer(0, sizeof(data), data);
+		// camera
+		camera = new scene::Camera();
 	} 
 
 	void render() {
 
-		/*
-			Compute Shader using shader storage buffer objects
-		*/
-
-		storageBuffer->bind();
-		computeShader->dispatch(1280 / 16, 720 / 16, 1, GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT);
-		storageBuffer->unbind();
+		//update Camera
+		camera->update();
 
 		/*
 			traditional rendering strategy
@@ -116,13 +104,16 @@ public:
 		//load uniform value
 		u_Color->setFloat4(1.0f, 0.0, 0.0, 1.0);
 
+
+		u_projectionMatrix->setMatrix4f(camera->projectionMatrix);
+
 		//bind texture
 		texture->bind(0);
 
 		//bind mesh
 		mesh->bind();
 
-		//render/draw
+		//render/draw  
 		glDrawElements(GL_TRIANGLES, mesh->getIndexCount(), GL_UNSIGNED_INT, nullptr);
 		
 		mesh->unbind();
@@ -134,11 +125,11 @@ public:
 		delete texture;
 		delete mesh;
 		delete rendererShader;
-		delete computeShader;
 		delete u_Color;
+		delete u_projectionMatrix;
 		delete s_texture;
-		delete storageBuffer;
-		delete imageBuffer;
+
+		delete camera;
 	}
 
 private:

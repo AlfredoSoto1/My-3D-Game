@@ -72,6 +72,10 @@ namespace shader {
 		void setUInt3(const unsigned int& x, const unsigned int& y, const unsigned int& z);
 		void setUInt4(const unsigned int& x, const unsigned int& y, const unsigned int& z, const unsigned int& w);
 
+		void setMatrix2f(float* matrix2f);
+		void setMatrix3f(float* matrix3f);
+		void setMatrix4f(float* matrix4f);
+
 	private:
 		int location;
 		unsigned int shaderProgram;

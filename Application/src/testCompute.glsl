@@ -1,5 +1,4 @@
-#shader compute
-
+//#shader compute
 #version 430
 
 layout(local_size_x = 16, local_size_y = 16) in;
@@ -16,8 +15,7 @@ float random(vec2 st) {
 		43758.5453123);
 }
 
-void main() {
-
+void main(void) {
 
 	ivec2 pixelCoords = ivec2(gl_GlobalInvocationID.xy);
 	ivec2 imageResolution = imageSize(img_output);
@@ -37,7 +35,7 @@ void main() {
 
 	pixel = vec4(0.0, 0.0, 0.0, 1.0);
 	pixel = vec4(normalizedPixelCoords , 0.0, 1.0);
-	
+
 	//
 	// interesting stuff happens here later
 	//

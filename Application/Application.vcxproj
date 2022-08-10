@@ -166,9 +166,9 @@
     <ClInclude Include="src\RendererTest.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\testCompute.shader" />
-    <None Include="src\testF.shader" />
-    <None Include="src\testV.shader" />
+    <None Include="src\testCompute.glsl" />
+    <None Include="src\testF.glsl" />
+    <None Include="src\testV.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

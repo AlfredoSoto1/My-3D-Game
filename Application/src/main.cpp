@@ -15,7 +15,7 @@ RendererTest* renderTest;
 int main() {
 
 	graphics::Display* window1 = new graphics::Display("Window 1", 1280, 720);
-
+	
 	window1->setTargetFps(graphics::Display::UNLIMITED_FPS);
 	window1->setDynamicUpdate(false);
 	window1->setFuntions(&init, &update, &dispose);

@@ -68,6 +68,7 @@ void Shader::offProgram() {
 }
 
 void Shader::dispatch(int groupX, int groupY, int groupZ, int barrier) {
+	//GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT <-- barrier
 	glUseProgram(program);
 	glDispatchCompute(
 		groupX > workGroupMaxCount[0] ? workGroupMaxCount[0] : groupX,
@@ -233,6 +234,18 @@ void Uniform::setUInt3(const unsigned int& x, const unsigned int& y, const unsig
 
 void Uniform::setUInt4(const unsigned int& x, const unsigned int& y, const unsigned int& z, const unsigned int& w) {
 	glUniform4i(location, x, y, z, w);
+}
+
+void Uniform::setMatrix2f(float* matrix2f) {
+	glUniformMatrix2fv(location, 1, GL_TRUE, matrix2f);
+}
+
+void Uniform::setMatrix3f(float* matrix3f) {
+	glUniformMatrix3fv(location, 1, GL_TRUE, matrix3f);
+}
+
+void Uniform::setMatrix4f(float* matrix4f) {
+	glUniformMatrix4fv(location, 1, GL_TRUE, matrix4f);
 }
 
 /*
