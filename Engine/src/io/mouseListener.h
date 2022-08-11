@@ -16,6 +16,7 @@ namespace listener {
 		//bool isbuttonClicked(int button);
 		//bool isbuttonReleased(int button);
 		void getMouseSpeed(double* xSpeed, double* ySpeed);
+		void getMousePosition(double* xpos, double* ypos);
 
 		void(*mouseEnterCallbackAction)(void* displayPtr, int isinside) = nullptr;
 

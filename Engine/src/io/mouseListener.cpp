@@ -80,3 +80,8 @@ void MouseListener::getMouseSpeed(double* xSpeed, double* ySpeed) {
 	*ySpeed = yPosition - lastYPosition;
 	lastYPosition = yPosition;
 }
+
+void MouseListener::getMousePosition(double* xpos, double* ypos) {
+	*xpos = xPosition;
+	*ypos = yPosition;
+}

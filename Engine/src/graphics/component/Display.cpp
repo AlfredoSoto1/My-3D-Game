@@ -361,6 +361,10 @@ void Display::processFrames() {
 		frames = 0;
 		lastRefresh = glfwGetTime() * 1000.0;
 	}
+
+	double currentTime = glfwGetTime();
+	currentGameTick = (currentTime - lastGameTick);
+	lastGameTick = currentTime;
 }
 
 void Display::createDisplay() {

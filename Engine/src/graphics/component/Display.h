@@ -79,6 +79,8 @@ namespace graphics {
 		listener::MouseListener* mouseListener;
 		listener::KeyListener* keyListener;
 
+		double currentGameTick = 0.0;
+
 	private:
 
 		const char* title;
@@ -97,6 +99,7 @@ namespace graphics {
 
 		double lastTime = 0.0;
 		double lastRefresh = 0.0;
+		double lastGameTick = 0.0;
 
 		//Window Display transparency
 		float transparency = 0.0f;

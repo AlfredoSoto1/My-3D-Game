@@ -123,7 +123,7 @@ void vec2::set(float x, float y) {
 }
 
 float& vec2::operator [] (unsigned int index) {
-	return *((float*)this + (1 & index));
+	return *((float*)this + index);
 }
 
 vec2 vec2::operator - () {
@@ -205,7 +205,7 @@ void vec3::set(float x, float y, float z) {
 }
 
 float& vec3::operator [] (unsigned int index) {
-	return *((float*)this + (2 & index));
+	return *((float*)this + index);
 }
 
 vec3 vec3::operator - () {
@@ -295,7 +295,7 @@ void vec4::set(float x, float y, float z, float w) {
 }
 
 float& vec4::operator [] (unsigned int index) {
-	return *((float*)this + (3 & index));
+	return *((float*)this + index);
 }
 
 vec4 vec4::operator - () {

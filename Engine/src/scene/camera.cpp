@@ -24,16 +24,6 @@ Camera::Camera() {
 	displayRef->getDimensions(&width, &height);
 	calcProjectionMatrix(&projectionMatrix, farPlane, nearPlane, fov, width, height);
 
-
-	//calc view matrix
-	//public Matrix4f getViewMatrix() {
-	//	viewMatrix.identity();
-	//	viewMatrix.rotate((float)Math.toRadians(xRot), new Vector3f(1, 0, 0));
-	//	viewMatrix.rotate((float)Math.toRadians(yRot), new Vector3f(0, 1, 0));
-	//	Vector3f negativeCameraPos = new Vector3f(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-	//	viewMatrix.translate(negativeCameraPos);
-	//	return viewMatrix;
-	//}
 }
 
 Camera::~Camera() {
@@ -52,41 +42,56 @@ void Camera::update() {
 	}
 
 	//move camera
-	//FIXME
-	float velx = 0.001f;
-	float vely = 0.001f;
-	float velz = 0.001f;
+	double gameTick = displayRef->currentGameTick * 1000.0;
 
-	if (displayRef->keyListener->isKeyDown(GLFW_KEY_W)) {
-		position.z -= velz;
-	}
+	double xSpeed = 0.001;
+	double ySpeed = 0.001;
+	//displayRef->mouseListener->getMouseSpeed(&xSpeed, &ySpeed);
 
-	if (displayRef->keyListener->isKeyDown(GLFW_KEY_S)) {
-		position.z += velz;
-	}
+	xSpeed = getDirectionSpeedFromKey(GLFW_KEY_RIGHT, GLFW_KEY_LEFT, xSpeed);
+	ySpeed = getDirectionSpeedFromKey(GLFW_KEY_DOWN, GLFW_KEY_UP, ySpeed);
 
-	if (displayRef->keyListener->isKeyDown(GLFW_KEY_A)) {
-		position.x -= velx;
-	}
+	updateMovementDirection();
 
-	if (displayRef->keyListener->isKeyDown(GLFW_KEY_D)) {
-		position.x += velx;
-	}
+	//update camera view direction
+	rotation += maths::structs::vec3(ySpeed * gameTick * 360.0f, xSpeed * gameTick * 360.0f, 0.0);
 
-	if (displayRef->keyListener->isKeyDown(GLFW_KEY_SPACE)) {
-		position.y += vely;
-	}
+	float yRotationRadians = maths::functions::toRadians(rotation.y);
+	float sinRot = sin(yRotationRadians);
+	float cosRot = cos(yRotationRadians);
 
-	if (displayRef->keyListener->isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
-		position.y -= vely;
-	}
+	float xDisplacement = cosRot * direction.x - sinRot * direction.z;
+	float zDisplacement = cosRot * direction.z + sinRot * direction.x;
+
+	direction.set(xDisplacement, direction.y, zDisplacement);
+	direction *= gameTick;
+
+	position += direction;
 
 	//update view matrix
 	maths::structs::identity(&viewMatrix);
-	maths::structs::rotate(viewMatrix, &viewMatrix, rotation.y, maths::structs::vec3(0, 1, 0));
-	maths::structs::rotate(viewMatrix, &viewMatrix, rotation.x, maths::structs::vec3(1, 0, 0));
+	maths::structs::rotate(viewMatrix, &viewMatrix, maths::functions::toRadians(rotation.x), maths::structs::vec3(1, 0, 0));
+	maths::structs::rotate(viewMatrix, &viewMatrix, maths::functions::toRadians(rotation.y), maths::structs::vec3(0, 1, 0));
 
 	maths::structs::translate(viewMatrix, &viewMatrix, -position);
+}
+
+void Camera::updateMovementDirection() {
+	float xDir = getDirectionSpeedFromKey(GLFW_KEY_D, GLFW_KEY_A, speed);
+	float yDir = getDirectionSpeedFromKey(GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, speed);
+	float zDir = getDirectionSpeedFromKey(GLFW_KEY_S, GLFW_KEY_W, speed);
+
+	direction.set(xDir, yDir, zDir);
+}
+
+float Camera::getDirectionSpeedFromKey(unsigned int key1, unsigned int key2, const float& speed) {
+	if (displayRef->keyListener->isKeyDown(key1) && displayRef->keyListener->isKeyDown(key2))
+		return 0.0f;
+	else if (displayRef->keyListener->isKeyDown(key1))
+		return speed;
+	else if (displayRef->keyListener->isKeyDown(key2))
+		return -speed;
+	return 0.0f;
 }
 
 

@@ -27,6 +27,11 @@ namespace scene {
 		float nearPlane = 0.1f;
 		float farPlane = 1000.0f;
 
+		float speed = 0.005f;
+
+		void updateMovementDirection();
+		float getDirectionSpeedFromKey(unsigned int key1, unsigned int key2, const float& speed);
+
 	};
 
 }
