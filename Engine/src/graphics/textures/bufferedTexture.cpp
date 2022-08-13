@@ -1,17 +1,40 @@
 #include "bufferedTexture.h"
 
 #include <GL/glew.h>
-#include "../../exceptions/Error.h"
 #include <iostream>
-#include <stdlib.h>
+
+#include "../../exceptions/Error.h"
 
 using namespace texture;
 
-BufferedTexture::BufferedTexture(unsigned int width, unsigned int height) : 
+BufferedTexture::BufferedTexture(unsigned int width, unsigned int height, void* pixels) : 
 width(width), height(height) {
 	glGenTextures(1, &textureId);
 
-	create();
+	initializeVariables();
+
+	error::glClearError();
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	setTextureParameters();
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, (void*)pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	error::glCheckError();
+}
+
+BufferedTexture::BufferedTexture(unsigned int width, unsigned int height, int slot, void* pixels) :
+	width(width), height(height), slot(slot) {
+	glGenTextures(1, &textureId);
+
+	initializeVariables();
+
+	error::glClearError();
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	setTextureParameters();
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, (void*)pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	error::glCheckError();
 }
 
 BufferedTexture::~BufferedTexture() {
@@ -22,56 +45,72 @@ unsigned int BufferedTexture::getId() const {
 	return textureId;
 }
 
-void BufferedTexture::create() {
+unsigned int BufferedTexture::getFormat() const {
+	return format;
+}
 
-	minFilter = GL_NEAREST;// GL_LINEAR;
+int BufferedTexture::getInternalFormat() const {
+	return internalFormat;
+}
+
+void BufferedTexture::setWrap(unsigned int wrap) {
+	this->textureWrap = wrap;
+}
+
+void BufferedTexture::setFilter(unsigned int filter) {
+	this->minFilter = filter;
+	this->magFilter = filter;
+}
+
+void BufferedTexture::setMipmapLevel(float mipmapLevel) {
+	this->mipmapLevel = mipmapLevel;
+}
+
+void BufferedTexture::setAnisotropicFilter(float anisotropicFilter) {
+	this->anisotropicFilter = anisotropicFilter;
+}
+
+void BufferedTexture::initializeVariables() {
+	minFilter = GL_NEAREST;// GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR;
 	magFilter = GL_NEAREST;// GL_LINEAR;
 
 	textureWrap = GL_CLAMP_TO_EDGE;// GL_REPEAT; //GL_CLAMP_TO_EDGE;
-	
-	error::glClearError();
 
-	glBindTexture(GL_TEXTURE_2D, textureId);//bind
+	format = GL_RGBA;
+	internalFormat = GL_RGBA8;
 
+	type = GL_UNSIGNED_BYTE;
+}
+
+void BufferedTexture::setTextureParameters() {
+	//set filters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 
-	if (textureWrap == GL_CLAMP_TO_BORDER) {
-		float param[4] = {0.0, 0.0, 0.0, 1.0};
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, param);
-	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrap);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrap);
-
+	//set mip-mapping and anisotropic filtering
 	if (minFilter == GL_NEAREST_MIPMAP_NEAREST || minFilter == GL_LINEAR_MIPMAP_LINEAR) {
 		glGenerateMipmap(GL_TEXTURE_2D);
+		if (anisotropicFilter != 0.0f) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -0.5f);
+		}
+		else {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0.0);
+		}
 		anisotropicFilterLevel();
 	}
 
-	//simple image
-	char* pixels = new char[width * height * 4];
-	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < height; y++) {
-			pixels[(x + y * width) * 4 + 0] = rand() % 255;
-			pixels[(x + y * width) * 4 + 1] = rand() % 255;
-			pixels[(x + y * width) * 4 + 2] = rand() % 255;
-			pixels[(x + y * width) * 4 + 3] = 255;
-		}
+	//texture border (optional)
+	if (textureWrap == GL_CLAMP_TO_BORDER) {
+		float param[4] = { 0.0, 0.0, 0.0, 1.0 };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, param);
 	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)pixels);
-
-	delete[] pixels;
-
-	glBindTexture(GL_TEXTURE_2D, 0);//unbind
-
-	error::glCheckError();
+	//texture wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrap);
 }
 
 void BufferedTexture::anisotropicFilterLevel() {
-	if (anisotropicFilter == 0.0f)
-		return;
 	if (GL_EXT_texture_filter_anisotropic == GL_TRUE) {
 		float anisotropy = anisotropicFilter;
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
@@ -83,8 +122,23 @@ void BufferedTexture::anisotropicFilterLevel() {
 	}
 }
 
-void BufferedTexture::bind(unsigned int slot) {
-	glActiveTexture(GL_TEXTURE0 + slot);
+void BufferedTexture::setPixelData(void* pixels) {
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void BufferedTexture::getPixelData(void* pixels) {
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glGetTexImage(GL_TEXTURE_2D, 0, format, type, pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void BufferedTexture::bind(int slot) {
+	if(this->slot < 0)
+		glActiveTexture(GL_TEXTURE0 + slot);
+	else
+		glActiveTexture(GL_TEXTURE0 + this->slot);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
@@ -93,10 +147,21 @@ void BufferedTexture::unbind() {
 }
 
 //image class
-
-void getPixels(int x, int y, int width, int channels, char* pixels) {
-	pixels[(x + y * width) * channels + 0] = 255;
-	pixels[(x + y * width) * channels + 1] = 0;
-	pixels[(x + y * width) * channels + 2] = 255;
-	pixels[(x + y * width) * channels + 3] = 255;
-}
+//
+//void tempFunc(int x, int y, int width, int channels, char* pixels) {
+//	pixels[(x + y * width) * channels + 0] = 255;
+//	pixels[(x + y * width) * channels + 1] = 0;
+//	pixels[(x + y * width) * channels + 2] = 255;
+//	pixels[(x + y * width) * channels + 3] = 255;
+//
+//	//simple image
+//	char* pixels = new char[width * height * 4];
+//	for (int x = 0; x < width; x++) {
+//		for (int y = 0; y < height; y++) {
+//			pixels[(x + y * width) * 4 + 0] = rand() % 255;
+//			pixels[(x + y * width) * 4 + 1] = rand() % 255;
+//			pixels[(x + y * width) * 4 + 2] = rand() % 255;
+//			pixels[(x + y * width) * 4 + 3] = 255;
+//		}
+//	}
+//}

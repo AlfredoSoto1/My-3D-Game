@@ -44,6 +44,8 @@ namespace graphics {
 		void requestAttention();
 		void centerCursorOnLaunch();
 
+		volatile bool resized();
+
 		//display set funcitions
 		void setTitle(const char* title);
 		void setSize(int width, int height);
@@ -77,16 +79,18 @@ namespace graphics {
 		listener::MouseListener* mouseListener;
 		listener::KeyListener* keyListener;
 
+		double timeDifference = 0.0;
+
 	private:
 
 		const char* title;
 
 		int idLocation;
-
+		 
 		int xpos, ypos;
 		int width, height;
 
-		static int currentDisplaysRunning;
+		volatile static int currentDisplaysRunning;
 
 		//Display preferences
 		int frames = 0;
@@ -95,6 +99,7 @@ namespace graphics {
 
 		double lastTime = 0.0;
 		double lastRefresh = 0.0;
+		double lastTimeDifference = 0.0;
 
 		//Window Display transparency
 		float transparency = 0.0f;
@@ -111,12 +116,12 @@ namespace graphics {
 		bool isResizable = true;
 		bool isDecorated = true;
 		bool isFullscreen = false;
-		bool isRunning = false;
-		bool vsyncEnabled = true;
-		bool waiting = true;
-		bool hasInitiated = false;
-		bool failedToCreate = false;
-		bool hasResized = false;
+		volatile bool isRunning = false;
+		volatile bool vsyncEnabled = true;
+		volatile bool waiting = true;
+		volatile bool hasInitiated = false;
+		volatile bool failedToCreate = false;
+		volatile bool hasResized = false;
 
 		//integrated functions
 		int(*init)();

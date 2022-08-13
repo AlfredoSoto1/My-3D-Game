@@ -14,3 +14,7 @@ void error::glCheckError() {
 		std::cout << "[OpenGL Error]: " << error << std::endl;
 	}
 }
+
+void error::throwOutBoundsError(unsigned int offNumber, unsigned int limit) {
+	std::cout << "Index out of bounds! " << offNumber << " of " << limit << std::endl;
+}

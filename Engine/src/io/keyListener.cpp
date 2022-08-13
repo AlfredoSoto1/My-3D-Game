@@ -38,7 +38,7 @@ KeyListener::~KeyListener() {
 }
 
 bool KeyListener::isKeyDown(int key) {
-	return keys[key];
+	return (keys[key] == true) ? true : false;
 }
 
 bool KeyListener::isKeyToggled(int key) {
@@ -46,6 +46,9 @@ bool KeyListener::isKeyToggled(int key) {
 		if (!toggled) {
 			toggled = true;
 			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	else {
@@ -67,3 +70,4 @@ bool KeyListener::isKeyReleased(int key) {
 		return false;
 	}
 }
+

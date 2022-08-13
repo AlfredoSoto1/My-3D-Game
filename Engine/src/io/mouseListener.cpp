@@ -9,7 +9,9 @@
 
 using namespace listener;
 
-MouseListener::MouseListener(void* displayPtr) {
+MouseListener::MouseListener(void* displayPtr)
+	: displayPtr(displayPtr)
+{
 
 	/*
 		creates a lambda function with the corresponding action acording to its callback type
@@ -79,4 +81,66 @@ void MouseListener::getMouseSpeed(double* xSpeed, double* ySpeed) {
 	lastXPosition = xPosition;
 	*ySpeed = yPosition - lastYPosition;
 	lastYPosition = yPosition;
+}
+
+void MouseListener::getMousePosition(double* xpos, double* ypos) {
+	*xpos = xPosition;
+	*ypos = yPosition;
+}
+
+void MouseListener::speedToZero() {
+	lastXPosition = xPosition;
+	lastYPosition = yPosition;
+}
+
+//void* MouseListener::setCursorShape(unsigned int cursorShape) {
+//	switch (cursorShape) {
+//	case IBEAM:
+//		return glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+//	case HAND:
+//		return glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+//	case CROSSHAIR:
+//		return glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
+//	case HRESIZE:
+//		return glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+//	case VRESIZE:
+//		return glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+//	default:
+//		return glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+//	}
+//}
+
+void MouseListener::setCursor(void* cursor) {
+	GLFWwindow* window = *(graphics::Display*)displayPtr;
+	GLFWcursor* cursorRef = (GLFWcursor*)cursor;
+	glfwSetCursor(window, cursorRef);
+}
+
+void MouseListener::destroy(void* cursor) {
+	GLFWcursor* cursorRef = (GLFWcursor*)cursor;
+	glfwDestroyCursor(cursorRef);
+}
+
+void MouseListener::hideCursor() {
+	GLFWwindow* window = *(graphics::Display*)displayPtr;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void MouseListener::grabCursor() {
+	GLFWwindow* window = *(graphics::Display*)displayPtr;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void MouseListener::defaultCursor() {
+	GLFWwindow* window = *(graphics::Display*)displayPtr;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void MouseListener::setCursorPosition(double x, double y) {
+	GLFWwindow* window = *(graphics::Display*)displayPtr;
+	glfwSetCursorPos(window, x, y);
+	xPosition = x;
+	yPosition = y;
+	lastXPosition = x;
+	lastYPosition = y;
 }

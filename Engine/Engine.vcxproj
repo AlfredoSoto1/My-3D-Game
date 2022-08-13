@@ -23,27 +23,39 @@
     <ClInclude Include="src\exceptions\Error.h" />
     <ClInclude Include="src\graphics\geometry\mesh.h" />
     <ClInclude Include="src\graphics\geometry\model.h" />
+    <ClInclude Include="src\structs\vertex.h" />
     <ClInclude Include="src\graphics\shader\shaderProgram.h" />
+    <ClInclude Include="src\graphics\textures\bufferedImage.h" />
     <ClInclude Include="src\graphics\textures\bufferedTexture.h" />
     <ClInclude Include="src\io\keyListener.h" />
     <ClInclude Include="src\io\mouseListener.h" />
     <ClInclude Include="src\io\windowListener.h" />
+    <ClInclude Include="src\maths\constants.h" />
+    <ClInclude Include="src\maths\functions.h" />
+    <ClInclude Include="src\maths\matrix.h" />
+    <ClInclude Include="src\maths\vectors.h" />
+    <ClInclude Include="src\scene\camera.h" />
     <ClInclude Include="src\structs\arrayList.h" />
     <ClInclude Include="src\structs\linkedList.h" />
+    <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\component\Display.cpp" />
     <ClCompile Include="src\exceptions\Error.cpp" />
     <ClCompile Include="src\graphics\geometry\mesh.cpp" />
     <ClCompile Include="src\graphics\shader\shaderProgram.cpp" />
+    <ClCompile Include="src\graphics\textures\bufferedImage.cpp" />
     <ClCompile Include="src\graphics\textures\bufferedTexture.cpp" />
     <ClCompile Include="src\io\keyListener.cpp" />
     <ClCompile Include="src\io\mouseListener.cpp" />
     <ClCompile Include="src\io\windowListener.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\graphics\shader\defaultFragment.shader" />
-    <None Include="src\graphics\shader\defaultVertex.shader" />
+    <ClCompile Include="src\maths\functions.cpp" />
+    <ClCompile Include="src\maths\matrix.cpp" />
+    <ClCompile Include="src\maths\vectors.cpp" />
+    <ClCompile Include="src\scene\camera.cpp" />
+    <ClCompile Include="src\structs\arrayList.cpp" />
+    <ClCompile Include="src\structs\linkedList.cpp" />
+    <ClCompile Include="vendor\stb_image.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -102,6 +114,14 @@
     <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\Engine\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\Engine\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\Engine\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\Engine\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>

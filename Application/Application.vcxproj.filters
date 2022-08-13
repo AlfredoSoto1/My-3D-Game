@@ -18,14 +18,24 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\chunkBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RendererTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\chunkBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\testF.shader" />
-    <None Include="src\testV.shader" />
+    <None Include="src\testF.glsl" />
+    <None Include="src\testV.glsl" />
+    <None Include="src\testCompute.glsl" />
   </ItemGroup>
 </Project>

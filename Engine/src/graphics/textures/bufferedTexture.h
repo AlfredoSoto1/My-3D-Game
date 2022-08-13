@@ -9,12 +9,23 @@ namespace texture {
 	class BufferedTexture {
 	public:
 
-		BufferedTexture(unsigned int width, unsigned int height);
+		BufferedTexture(unsigned int width, unsigned int height, void* pixels);
+		BufferedTexture(unsigned int width, unsigned int height, int slot, void* pixels);
 		~BufferedTexture();
 
 		unsigned int getId() const;
+		unsigned int getFormat() const;
+		int getInternalFormat() const;
 
-		void bind(unsigned int slot = 0);
+		void setWrap(unsigned int wrap);
+		void setFilter(unsigned int filter);
+		void setMipmapLevel(float mipmapLevel = 0.0f);
+		void setAnisotropicFilter(float anisotropicFilter = 0.0f);
+
+		void setPixelData(void* pixels);
+		void getPixelData(void* pixels);
+
+		void bind(int slot = 0);
 		void unbind();
 
 	private:
@@ -28,9 +39,18 @@ namespace texture {
 		unsigned int magFilter;
 		unsigned int textureWrap;
 
-		float anisotropicFilter = 0.0;
+		int internalFormat;
+		unsigned int format;
 
-		void create();
+		unsigned int type;
+
+		int slot = -1;
+
+		float mipmapLevel = 0.0f;
+		float anisotropicFilter = 0.0f;
+
+		void initializeVariables();
+		void setTextureParameters();
 		void anisotropicFilterLevel();
 	};
 
