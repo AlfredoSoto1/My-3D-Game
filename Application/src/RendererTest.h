@@ -6,9 +6,10 @@
 #include "graphics/textures/bufferedTexture.h"
 #include "scene/camera.h"
 
-#include "structs/maths.h"
+#include "maths/matrix.h"
 
-#include <stdlib.h>
+
+#include "chunkBuilder.h"
 
 class RendererTest {
 public:
@@ -20,10 +21,15 @@ public:
 	shader::Shader* rendererShader;
 	shader::Uniform* u_Color;
 	shader::Uniform* u_projectionMatrix;
+	shader::Uniform* u_transformationMatrix;
 	shader::Uniform* u_viewMatrix;
 	shader::TextureSampler* s_texture;
 
+	maths::mat4 transformationMatrix;
+
 	scene::Camera* camera;
+
+	ChunkBuilderOLD* chunkBuilder;
 
 	RendererTest() {
 
@@ -45,44 +51,47 @@ public:
 		u_Color = new shader::Uniform(*rendererShader, "u_Color");
 		u_projectionMatrix = new shader::Uniform(*rendererShader, "projectionMatrix");
 		u_viewMatrix = new shader::Uniform(*rendererShader, "viewMatrix");
+		u_transformationMatrix = new shader::Uniform(*rendererShader, "transformationMatrix");
 
-		unsigned int indices[12] = {
-			0, 1, 2,
-			2, 3, 0, 
+		//unsigned int indices[12] = {
+		//	0, 1, 2,
+		//	2, 3, 0, 
 
-			4, 5, 6,
-			6, 7, 4
-		};
+		//	4, 5, 6,
+		//	6, 7, 4
+		//};
 
-		float positions[24] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f, 
+		//float positions[24] = {
+		//	-0.5f, -0.5f, 0.0f,
+		//	 0.5f, -0.5f, 0.0f,
+		//	 0.5f,  0.5f, 0.0f,
+		//	-0.5f,  0.5f, 0.0f, 
 
-			0.0f,  0.5f, -0.5f,
-			0.0f, -0.5f, -0.5f,
-			0.0f, -0.5f,  0.5f,
-			0.0f,  0.5f,  0.5f
+		//	0.0f,  0.5f, -0.5f,
+		//	0.0f, -0.5f, -0.5f,
+		//	0.0f, -0.5f,  0.5f,
+		//	0.0f,  0.5f,  0.5f
 
-		};
+		//};
 
-		float textureCoords[16] = {
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f, 
+		//float textureCoords[16] = {
+		//	0.0f, 0.0f,
+		//	1.0f, 0.0f,
+		//	1.0f, 1.0f,
+		//	0.0f, 1.0f, 
 
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f
-		};
+		//	0.0f, 0.0f,
+		//	1.0f, 0.0f,
+		//	1.0f, 1.0f,
+		//	0.0f, 1.0f
+		//};
+
+		chunkBuilder = new ChunkBuilderOLD();
 
 		mesh = new geometry::Mesh();
-		mesh->createIndexBuffer(12, indices);
-		mesh->createAttribute(0, 3, 8, positions, GL_FLOAT);
-		mesh->createAttribute(1, 2, 8, textureCoords, GL_FLOAT);
+		mesh->createIndexBuffer(chunkBuilder->totalIndexArrayLength, chunkBuilder->modelIndices);
+		mesh->createAttribute(0, 3, chunkBuilder->totalPointArrayLength, chunkBuilder->modelPoints, GL_FLOAT);
+		//mesh->createAttribute(1, 2, 8, textureCoords, GL_FLOAT);
 
 		int width = 16;
 		int height = 16;
@@ -120,8 +129,13 @@ public:
 		//load uniform value
 		u_Color->setFloat4(1.0f, 0.0, 0.0, 1.0);
 
+		//apply view and projection matrix
 		u_projectionMatrix->setMatrix4f(camera->projectionMatrix);
 		u_viewMatrix->setMatrix4f(camera->viewMatrix);
+
+		//apply transformation matrix
+		maths::transform(&transformationMatrix, maths::vec3(0.0), maths::vec3(0.0), maths::vec3(1.0));
+		u_transformationMatrix->setMatrix4f(transformationMatrix);
 
 		//bind texture
 		texture->bind(0);
@@ -145,10 +159,13 @@ public:
 		delete rendererShader;
 		delete u_Color;
 		delete u_projectionMatrix;
+		delete u_transformationMatrix;
 		delete u_viewMatrix;
 		delete s_texture;
 
 		delete camera;
+
+		delete chunkBuilder;
 	}
 
 private:

@@ -18,9 +18,6 @@
     <ClInclude Include="src\graphics\component\Display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\structs\arrayList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\exceptions\Error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,10 +51,25 @@
     <ClInclude Include="src\graphics\shader\shaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\structs\maths.h">
+    <ClInclude Include="src\scene\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\camera.h">
+    <ClInclude Include="src\maths\vectors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths\constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\structs\arrayList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\structs\vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,10 +104,22 @@
     <ClCompile Include="src\graphics\shader\shaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\structs\maths.cpp">
+    <ClCompile Include="src\scene\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\camera.cpp">
+    <ClCompile Include="src\maths\matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths\vectors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maths\functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\structs\arrayList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\structs\linkedList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

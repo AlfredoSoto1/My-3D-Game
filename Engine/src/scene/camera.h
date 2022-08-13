@@ -3,19 +3,20 @@
 #ifndef _CAMERA_DEFINED
 #define _CAMERA_DEFINED
 
-#include "../structs/maths.h"
+#include "../maths/vectors.h"
+#include "../maths/matrix.h"
 
 namespace scene {
 
 	class Camera {
 	public:
 
-		maths::structs::vec3 position;
-		maths::structs::vec3 rotation;
-		maths::structs::vec3 direction;
+		maths::vec3 position;
+		maths::vec3 rotation;
+		maths::vec3 direction;
 
-		maths::structs::mat4 viewMatrix;
-		maths::structs::mat4 projectionMatrix;
+		maths::mat4 viewMatrix;
+		maths::mat4 projectionMatrix;
 
 		Camera();
 		~Camera();
@@ -23,14 +24,36 @@ namespace scene {
 		void update();
 
 	private:
+
+		//camera lcok flag
+		bool locked = true;
+		bool lockedToggled = false;
+
+		//mouse pixel difference across screen
+		double xPixelDif = 0.0;
+		double yPixelDif = 0.0;
+
+		//camera adjustments
 		float fov = 45.0f; 
 		float nearPlane = 0.1f;
 		float farPlane = 1000.0f;
 
-		float speed = 0.005f;
+		//sensitivity
+		float xRotationSensitivity = 0.8f;
+		float yRotationSensitivity = 0.8f;
 
-		void updateMovementDirection();
-		float getDirectionSpeedFromKey(unsigned int key1, unsigned int key2, const float& speed);
+		//motion
+		float movementSpeed = 0.005f;
+
+		bool checkIfCameraLocked();
+
+		void updateViewMatrix();
+		void updateProjectionMatrix();
+
+		void calcCameraRotation(const double& milisecDif);
+		void calcMovementDirection(const double& milisecDif);
+
+		float getDirectionFromKey(unsigned int key1, unsigned int key2);
 
 	};
 

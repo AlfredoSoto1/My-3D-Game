@@ -33,7 +33,7 @@ Mesh::~Mesh() {
 	ArrayList<unsigned int>* attribNumberList = (ArrayList<unsigned int>*)this->attribNumberList;
 
 	//delete vbos
-	for (int i = 0; i < vboList->getLength(); i++)
+	for (int i = 0; i < vboList->getCount(); i++)
 		glDeleteBuffers(1, vboList->get(i));
 	//clears vbo list
 	vboList->clear();
@@ -54,7 +54,7 @@ unsigned int Mesh::getIbo() const {
 unsigned int Mesh::getIndexCount() const {
 	if (!hasIbo) {
 		ArrayList<unsigned int>* vboList = (ArrayList<unsigned int>*)this->vboList;
-		return (unsigned int)vboList->getLength();//wrong aqui se pone el vertex length
+		return (unsigned int)vboList->getCount();//wrong aqui se pone el vertex length
 	}
 	return indexCount;
 }
@@ -63,13 +63,13 @@ void Mesh::bind() const {
 	ArrayList<unsigned int>* attribNumberList = (ArrayList<unsigned int>*)this->attribNumberList;
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	for (int i = 0; i < attribNumberList->getLength(); i++)
+	for (int i = 0; i < attribNumberList->getCount(); i++)
 		glEnableVertexAttribArray(*attribNumberList->get(i));
 }
 
 void Mesh::unbind() const {
 	ArrayList<unsigned int>* attribNumberList = (ArrayList<unsigned int>*)this->attribNumberList;
-	for (int i = 0; i < attribNumberList->getLength(); i++)
+	for (int i = 0; i < attribNumberList->getCount(); i++)
 		glDisableVertexAttribArray(*attribNumberList->get(i));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

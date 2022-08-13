@@ -18,6 +18,16 @@ namespace listener {
 		void getMouseSpeed(double* xSpeed, double* ySpeed);
 		void getMousePosition(double* xpos, double* ypos);
 
+		void speedToZero();
+
+		//void* setCursorShape(unsigned int cursorShape);
+		void setCursor(void* cursor);
+		void destroy(void* cursor);
+		void hideCursor();
+		void grabCursor();
+		void defaultCursor();
+		void setCursorPosition(double x, double y);
+
 		void(*mouseEnterCallbackAction)(void* displayPtr, int isinside) = nullptr;
 
 	private:
@@ -33,6 +43,8 @@ namespace listener {
 		int pathCount;
 
 		const char** droppedPaths;
+
+		void* displayPtr;
 
 	};
 

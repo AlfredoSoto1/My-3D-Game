@@ -26,7 +26,7 @@ ArrayList<std::thread*> contextThread;
 Display::Display() :
 	title("Display"), width(MIN_WIDTH), height(MIN_HEIGHT) {
 	displayList.add(this);
-	idLocation = displayList.getLength();
+	idLocation = displayList.getCount();
 
 	std::thread* displayThread = new std::thread(Display::run, this);
 	displayThread->detach();
@@ -36,7 +36,7 @@ Display::Display() :
 Display::Display(const char* title, int width, int height) :
 title(title), width(width), height(height) {
 	displayList.add(this);
-	idLocation = displayList.getLength();
+	idLocation = displayList.getCount();
 
 	std::thread* displayThread = new std::thread(Display::run, this);
 	displayThread->detach();
@@ -318,7 +318,7 @@ void Display::build() {
 	if (displayList.isEmpty())
 		return;
 
-	for (int i = 0; i < displayList.getLength(); i++) {
+	for (int i = 0; i < displayList.getCount(); i++) {
 		Display* displayPtr = *displayList.get(i);
 		displayPtr->waiting = false;
 		while (!displayPtr->hasInitiated) {
@@ -327,7 +327,7 @@ void Display::build() {
 		}
 	}
 	//Allow threads to run after GLFW initialization
-	for (int i = 0; i < displayList.getLength(); i++) {
+	for (int i = 0; i < displayList.getCount(); i++) {
 		Display* displayPtr = *displayList.get(i);
 		if (displayPtr->failedToCreate)
 			continue;
@@ -338,7 +338,7 @@ void Display::build() {
 	while (Display::currentDisplaysRunning > 0);
 
 	//Deletes from memory thread pointers
-	for (int i = 0; i < contextThread.getLength(); i++)
+	for (int i = 0; i < contextThread.getCount(); i++)
 		delete* contextThread.get(i);
 	displayList.clear();
 	contextThread.clear();
@@ -363,8 +363,8 @@ void Display::processFrames() {
 	}
 
 	double currentTime = glfwGetTime();
-	currentGameTick = (currentTime - lastGameTick);
-	lastGameTick = currentTime;
+	timeDifference = (currentTime - lastTimeDifference);
+	lastTimeDifference = currentTime;
 }
 
 void Display::createDisplay() {

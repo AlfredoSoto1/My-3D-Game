@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\chunkBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
@@ -163,7 +164,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\chunkBuilder.h" />
     <ClInclude Include="src\RendererTest.h" />
+    <ClInclude Include="src\tables.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\testCompute.glsl" />
