@@ -11,7 +11,6 @@ namespace structs {
 	private:
 		
 	};
-
 }
 
 #endif // !_VERTEX_DEFINED
