@@ -13,4 +13,6 @@ namespace structs {
 	};
 }
 
+//last commition
+
 #endif // !_VERTEX_DEFINED
