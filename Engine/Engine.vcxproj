@@ -23,7 +23,6 @@
     <ClInclude Include="src\exceptions\Error.h" />
     <ClInclude Include="src\graphics\geometry\mesh.h" />
     <ClInclude Include="src\graphics\geometry\model.h" />
-    <ClInclude Include="src\structs\vertex.h" />
     <ClInclude Include="src\graphics\shader\shaderProgram.h" />
     <ClInclude Include="src\graphics\textures\bufferedImage.h" />
     <ClInclude Include="src\graphics\textures\bufferedTexture.h" />
@@ -34,6 +33,8 @@
     <ClInclude Include="src\maths\functions.h" />
     <ClInclude Include="src\maths\matrix.h" />
     <ClInclude Include="src\maths\vectors.h" />
+    <ClInclude Include="src\memory\smoothFloat.h" />
+    <ClInclude Include="src\memory\vertexBuffer.h" />
     <ClInclude Include="src\scene\camera.h" />
     <ClInclude Include="src\structs\arrayList.h" />
     <ClInclude Include="src\structs\linkedList.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="src\maths\functions.cpp" />
     <ClCompile Include="src\maths\matrix.cpp" />
     <ClCompile Include="src\maths\vectors.cpp" />
+    <ClCompile Include="src\memory\vertexBuffer.cpp" />
     <ClCompile Include="src\scene\camera.cpp" />
     <ClCompile Include="src\structs\arrayList.cpp" />
     <ClCompile Include="src\structs\linkedList.cpp" />

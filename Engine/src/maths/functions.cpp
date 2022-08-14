@@ -105,8 +105,8 @@ float maths::toRadians(float degree) {
 	return (PI / 180.0f) * degree;
 }
 
-float maths::distInterpolation(float point1, float point2, float avrg) {
-	return point1 + (point2 - point1) * avrg;
+float maths::distInterpolation(float value1, float value2, float avrg) {
+	return value1 + (value2 - value1) * avrg;
 }
 
 float maths::interpolate(float factor, float high, float low) {

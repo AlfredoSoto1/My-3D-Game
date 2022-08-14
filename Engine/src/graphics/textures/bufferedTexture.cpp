@@ -74,7 +74,7 @@ void BufferedTexture::initializeVariables() {
 	minFilter = GL_NEAREST;// GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR;
 	magFilter = GL_NEAREST;// GL_LINEAR;
 
-	textureWrap = GL_CLAMP_TO_EDGE;// GL_REPEAT; //GL_CLAMP_TO_EDGE;
+	textureWrap = GL_REPEAT;// GL_REPEAT; //GL_CLAMP_TO_EDGE;
 
 	format = GL_RGBA;
 	internalFormat = GL_RGBA8;

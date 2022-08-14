@@ -10,12 +10,13 @@ template<class Object>
 ArrayList<Object>::ArrayList() 
 	: arrayLength(10), elementCount(0)
 {
+	arrayResizeStep = 10;
 	resize();
 }
 
 template<class Object>
 ArrayList<Object>::ArrayList(unsigned int resizeStep)
-	: arrayLength(resizeStep), elementCount(0)
+	: arrayLength(resizeStep), arrayResizeStep(resizeStep), elementCount(0)
 {
 	resize();
 }
@@ -32,7 +33,7 @@ void ArrayList<Object>::resize() {
 		return;
 	}
 	Object* tempData = new Object[arrayLength * 2];
-	for (int i = 0; i < arrayLength; i++)
+	for (unsigned int i = 0; i < arrayLength; i++)
 		tempData[i] = data[i];
 	delete[] data;
 	data = tempData;
@@ -54,12 +55,15 @@ Object* ArrayList<Object>::get(unsigned int index) const {
 }
 
 template<class Object>
-Object* ArrayList<Object>::find(const Object& object) const {
+Object* ArrayList<Object>::find(const Object& object) {
 	int sizeOf_Object = sizeof(object);
 	char* rawBytes_Object = (char*)&object;
 
 	int verified = 0;
-	for (int i = 0; i < elementCount; i++) {
+	for (unsigned int i = 0; i < elementCount; i++) {
+		if (&data[i] == &object)
+			return &data[i];
+
 		int sizeOf_data = sizeof(data[i]);
 		char* rawBytes_data = (char*)&data[i];
 		if (sizeOf_data < sizeOf_Object)
@@ -80,7 +84,7 @@ Object* ArrayList<Object>::find(const Object& object) const {
 }
 
 template<class Object>
-bool ArrayList<Object>::contains(const Object& object) const {
+bool ArrayList<Object>::contains(const Object& object) {
 	Object* inListRef = find(object);
 	if (inListRef != nullptr)
 		return true;
@@ -89,7 +93,7 @@ bool ArrayList<Object>::contains(const Object& object) const {
 }
 
 template<class Object>
-int ArrayList<Object>::indexOf(const Object& object) const {
+int ArrayList<Object>::indexOf(const Object& object) {
 	Object* inListRef = find(object);
 	if (inListRef == nullptr)
 		return -1;
@@ -153,7 +157,7 @@ void ArrayList<Object>::insert(unsigned int index, const Object& object) {
 template<class Object>
 void ArrayList<Object>::clear() {
 	elementCount = 0;
-	arrayLength = 10;
+	arrayLength = arrayResizeStep;
 	if (data != nullptr)
 		delete[] data;
 	data = nullptr;
