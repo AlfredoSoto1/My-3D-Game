@@ -24,6 +24,9 @@ namespace buffer {
 		VertexBuffer(unsigned int resizeStep);
 		~VertexBuffer();
 
+		template<class T>
+		void createAttrib(const T& attrib);
+
 		void add(const Vertex& vertex);
 		void remove(unsigned int location);
 		void remove(const Vertex& vertex);
@@ -37,12 +40,16 @@ namespace buffer {
 		bool contains(const Vertex& vertex);
 
 		unsigned int getCount() const;
+
+		void compress();
 		void clear();
 
 	private:
 		unsigned int vertexCounter;
 		unsigned int bufferLength;
 		unsigned int resizeStep;
+
+		void* attribs;
 
 		Vertex* data;
 

@@ -24,6 +24,8 @@ VertexBuffer::VertexBuffer(unsigned int resizeStep)
 
 VertexBuffer::~VertexBuffer() {
 	clear();
+
+	delete[] attribs;
 }
 
 void VertexBuffer::resize() {
@@ -41,6 +43,12 @@ void VertexBuffer::resize() {
 
 bool VertexBuffer::needToResize() {
 	return bufferLength == vertexCounter;
+}
+
+template<class T>
+void VertexBuffer::createAttrib(const T& attrib) {
+	unsigned int sizeOfAttrib = sizeof(attrib);
+
 }
 
 void VertexBuffer::add(const Vertex& vertex) {
@@ -99,6 +107,10 @@ int VertexBuffer::find(const Vertex& vertex) {
 			return i;
 	}
 	return -1;
+}
+
+void VertexBuffer::compress() {
+
 }
 
 void VertexBuffer::clear() {
