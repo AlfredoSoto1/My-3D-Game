@@ -1,8 +1,23 @@
 #pragma once
 
+#ifndef _VERTEX_BUFFER_DEFINED
+#define _VERTEX_BUFFER_DEFINED
+
+#include "../maths/vectors.h"
+
 namespace buffer {
 
-	struct Vertex;
+	struct Vertex {
+		maths::vec3 position;
+		maths::vec3 normal;
+		unsigned int index;
+
+		bool operator == (const Vertex& vertex) {
+			bool samePosition = position == vertex.position;
+			bool sameNormal = normal == vertex.normal;
+			return samePosition && sameNormal;
+		}
+	};
 
 	class VertexBuffer {
 	public:
@@ -15,12 +30,13 @@ namespace buffer {
 		void replace(unsigned int location, const Vertex& newVertex);
 		void replace(const Vertex& oldVertex, const Vertex& newVertex);
 
+		//temp
+		Vertex* get(unsigned int location);
+
 		bool isEmpty() const;
 		bool contains(const Vertex& vertex);
 
 		unsigned int getCount() const;
-		int find(const Vertex& vertex);
-
 		void clear();
 
 	private:
@@ -30,8 +46,12 @@ namespace buffer {
 
 		Vertex* data;
 
+		int find(const Vertex& vertex);
+
 		void resize();
 		bool needToResize();
 	};
 
 }
+
+#endif // !_VERTEX_BUFFER_DEFINED

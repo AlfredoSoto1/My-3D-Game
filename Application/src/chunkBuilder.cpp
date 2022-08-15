@@ -24,11 +24,15 @@ struct ChunkBuilder::Voxel {
 ChunkBuilder::ChunkBuilder() {
 	vertices = new structs::ArrayList<Vertex>(1000);
 	indices  = new structs::ArrayList<unsigned int>(1000);
+
+	vertexBuffer = new buffer::VertexBuffer(1000);
 }
 
 ChunkBuilder::~ChunkBuilder() {
 	delete vertices;
 	delete indices;
+
+	delete vertexBuffer;
 
 	delete[] modelCoords;
 	delete[] modelNormals;
@@ -145,6 +149,22 @@ void ChunkBuilder::buildVertices(const Voxel& voxel) {
 		pushVertex(vert1);
 		pushVertex(vert2);
 		pushVertex(vert3);
+
+		buffer::Vertex vert1B;
+		buffer::Vertex vert2B;
+		buffer::Vertex vert3B;
+
+		vert1B.position = vert1.position;
+		vert2B.position = vert2.position;
+		vert3B.position = vert3.position;
+
+		vert1B.normal = normal;
+		vert2B.normal = normal;
+		vert3B.normal = normal;
+
+		vertexBuffer->add(vert1B);
+		vertexBuffer->add(vert2B);
+		vertexBuffer->add(vert3B);
 	}
 }
 
@@ -204,9 +224,13 @@ void ChunkBuilder::toMesh() {
 		modelIndices[index2] = *indices->get(index2);
 
 		//filter vertices
-		Vertex& vertex0 = *vertices->get(modelIndices[index0]);
-		Vertex& vertex1 = *vertices->get(modelIndices[index1]);
-		Vertex& vertex2 = *vertices->get(modelIndices[index2]);
+		//Vertex& vertex0 = *vertices->get(modelIndices[index0]);
+		//Vertex& vertex1 = *vertices->get(modelIndices[index1]);
+		//Vertex& vertex2 = *vertices->get(modelIndices[index2]);
+
+		buffer::Vertex& vertex0 = *vertexBuffer->get(modelIndices[index0]);
+		buffer::Vertex& vertex1 = *vertexBuffer->get(modelIndices[index1]);
+		buffer::Vertex& vertex2 = *vertexBuffer->get(modelIndices[index2]);
 
 		//filter positions
 		modelCoords[modelIndices[index0] * 3 + 0] = vertex0.position.x;

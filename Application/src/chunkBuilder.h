@@ -5,6 +5,7 @@
 
 #include "maths/vectors.h"
 #include "structs/arrayList.h"
+#include "memory/vertexBuffer.h"
 
 namespace generation {
 
@@ -26,10 +27,12 @@ namespace generation {
 		double surfaceLevel = 0.1;
 
 		bool interpolation = true;
-		bool shareVertices = true;
+		bool shareVertices = false;
 
 		struct Vertex;
 		struct Voxel;
+
+		buffer::VertexBuffer* vertexBuffer;
 
 		structs::ArrayList<Vertex>* vertices;
 		structs::ArrayList<unsigned int>* indices;

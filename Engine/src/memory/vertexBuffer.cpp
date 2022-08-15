@@ -4,18 +4,17 @@
 using namespace maths;
 using namespace buffer;
 
-struct buffer::Vertex {
-	unsigned int index;
-	
-	vec3 position;
-	vec3 normal;
-
-	bool operator == (const Vertex& vertex) {
-		bool samePosition = position == vertex.position;
-		bool sameNormal = normal == vertex.normal;
-		return samePosition && sameNormal;
-	}
-};
+//struct buffer::Vertex {
+//	vec3 position;
+//	vec3 normal;
+//	unsigned int index;
+//
+//	bool operator == (const Vertex& vertex) {
+//		bool samePosition = position == vertex.position;
+//		bool sameNormal = normal == vertex.normal;
+//		return samePosition && sameNormal;
+//	}
+//};
 
 VertexBuffer::VertexBuffer(unsigned int resizeStep) 
 	: bufferLength(resizeStep), vertexCounter(0), resizeStep(resizeStep)
@@ -47,7 +46,9 @@ bool VertexBuffer::needToResize() {
 void VertexBuffer::add(const Vertex& vertex) {
 	if (needToResize())
 		resize();
+	//add vertex to list
 	data[vertexCounter++] = vertex;
+	//add vertex to list after verifying that its unique
 }
 
 void VertexBuffer::remove(unsigned int location) {
@@ -70,6 +71,10 @@ void VertexBuffer::replace(const Vertex& oldVertex, const Vertex& newVertex) {
 	int location = find(oldVertex);
 	if (location != -1)
 		data[location] = newVertex;
+}
+
+Vertex* VertexBuffer::get(unsigned int location) {
+	return &data[location];
 }
 
 bool VertexBuffer::isEmpty() const {

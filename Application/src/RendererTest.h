@@ -89,6 +89,10 @@ public:
 		chunkBuilder->buildExample();
 
 		mesh = new geometry::Mesh();
+
+		//unsigned int triangles = chunkBuilder->modelCoordListLength / 3;
+		//unsigned int lessVertices = (triangles - 20) * 3;
+
 		mesh->createIndexBuffer(chunkBuilder->modelIndexListLength, chunkBuilder->modelIndices);
 		mesh->createAttribute(0, 3, chunkBuilder->modelCoordListLength, chunkBuilder->modelCoords, GL_FLOAT);
 		mesh->createAttribute(1, 3, chunkBuilder->modelCoordListLength, chunkBuilder->modelNormals, GL_FLOAT);
