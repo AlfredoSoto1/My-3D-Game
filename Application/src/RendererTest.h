@@ -8,7 +8,6 @@
 
 #include "maths/matrix.h"
 
-
 #include "chunkBuilder.h"
 
 class RendererTest {
@@ -29,7 +28,7 @@ public:
 
 	scene::Camera* camera;
 
-	ChunkBuilderOLD* chunkBuilder;
+	generation::ChunkBuilder* chunkBuilder;
 
 	RendererTest() {
 
@@ -53,26 +52,26 @@ public:
 		u_viewMatrix = new shader::Uniform(*rendererShader, "viewMatrix");
 		u_transformationMatrix = new shader::Uniform(*rendererShader, "transformationMatrix");
 
-		//unsigned int indices[12] = {
-		//	0, 1, 2,
-		//	2, 3, 0, 
+		unsigned int indices[12] = {
+			0, 1, 2,
+			2, 3, 0, 
 
-		//	4, 5, 6,
-		//	6, 7, 4
-		//};
+			4, 5, 6,
+			6, 7, 4
+		};
 
-		//float positions[24] = {
-		//	-0.5f, -0.5f, 0.0f,
-		//	 0.5f, -0.5f, 0.0f,
-		//	 0.5f,  0.5f, 0.0f,
-		//	-0.5f,  0.5f, 0.0f, 
+		float positions[24] = {
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f, 
 
-		//	0.0f,  0.5f, -0.5f,
-		//	0.0f, -0.5f, -0.5f,
-		//	0.0f, -0.5f,  0.5f,
-		//	0.0f,  0.5f,  0.5f
+			0.0f,  0.5f, -0.5f,
+			0.0f, -0.5f, -0.5f,
+			0.0f, -0.5f,  0.5f,
+			0.0f,  0.5f,  0.5f
 
-		//};
+		};
 
 		//float textureCoords[16] = {
 		//	0.0f, 0.0f,
@@ -86,11 +85,20 @@ public:
 		//	0.0f, 1.0f
 		//};
 
-		chunkBuilder = new ChunkBuilderOLD();
+		chunkBuilder = new generation::ChunkBuilder();
+		chunkBuilder->buildExample();
 
 		mesh = new geometry::Mesh();
-		mesh->createIndexBuffer(chunkBuilder->totalIndexArrayLength, chunkBuilder->modelIndices);
-		mesh->createAttribute(0, 3, chunkBuilder->totalPointArrayLength, chunkBuilder->modelPoints, GL_FLOAT);
+
+		//unsigned int triangles = chunkBuilder->modelCoordListLength / 3;
+		//unsigned int lessVertices = (triangles - 20) * 3;
+
+		mesh->createIndexBuffer(chunkBuilder->modelIndexListLength, chunkBuilder->modelIndices);
+		mesh->createAttribute(0, 3, chunkBuilder->modelCoordListLength, chunkBuilder->modelCoords, GL_FLOAT);
+		mesh->createAttribute(1, 3, chunkBuilder->modelCoordListLength, chunkBuilder->modelNormals, GL_FLOAT);
+
+		//mesh->createIndexBuffer(12, indices);
+		//mesh->createAttribute(0, 3, 8, positions, GL_FLOAT);
 		//mesh->createAttribute(1, 2, 8, textureCoords, GL_FLOAT);
 
 		int width = 16;
@@ -98,10 +106,10 @@ public:
 		char* pixels = new char[width * height * 4];
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				pixels[(x + y * width) * 4 + 0] = rand() % 255;
-				pixels[(x + y * width) * 4 + 1] = rand() % 255;
-				pixels[(x + y * width) * 4 + 2] = rand() % 255;
-				pixels[(x + y * width) * 4 + 3] = 255;
+				pixels[(x + y * width) * 4 + 0] = 24  * (24.0  / (rand() % 24 ));//Red
+				pixels[(x + y * width) * 4 + 1] = 147 * (147.0 / (rand() % 147));//Green
+				pixels[(x + y * width) * 4 + 2] = 66  * (66.0  / (rand() % 66 ));//Blue
+				pixels[(x + y * width) * 4 + 3] = 255;//alpha
 			}
 		}
 
@@ -145,7 +153,14 @@ public:
 
 		//render/draw  
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLES, mesh->getIndexCount(), GL_UNSIGNED_INT, nullptr);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		
+		glDisable(GL_CULL_FACE);
 		glDisable(GL_DEPTH_TEST);
 		
 		mesh->unbind();
@@ -164,6 +179,7 @@ public:
 		delete s_texture;
 
 		delete camera;
+
 
 		delete chunkBuilder;
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef _ARRAY_LIST_DEFINED_NEW
-#define _ARRAY_LIST_DEFINED_NEW
+#ifndef _ARRAY_LIST_DEFINED
+#define _ARRAY_LIST_DEFINED
 
 namespace structs {
 
@@ -14,9 +14,9 @@ namespace structs {
 
 		//accessor
 		Object* get(unsigned int index) const;
-		Object* find(const Object& object) const;
-		bool contains(const Object& object) const;
-		int indexOf(const Object& object) const;
+		Object* find(const Object& object);
+		bool contains(const Object& object);
+		int indexOf(const Object& object);
 
 		bool isEmpty() const;
 		unsigned int getCount() const;
@@ -34,6 +34,7 @@ namespace structs {
 	private:
 		unsigned int arrayLength;
 		unsigned int elementCount;
+		unsigned int arrayResizeStep;
 
 		Object* data;
 
@@ -45,8 +46,8 @@ namespace structs {
 			Object* array, int lowIndex, int highIndex);
 		void swapElement(Object* array, int index1, int index2);
 	};
-}
 
+}
 #include "arrayList.cpp"
 
 #endif // _ARRAY_LIST_DEFINED

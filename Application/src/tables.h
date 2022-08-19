@@ -3,7 +3,7 @@
 #ifndef _TABLES_DEFINED
 #define _TABLES_DEFINED
 
-float CORNERS[8][3] = {
+float voxelBox[8][3] = {
 			{0,0,0},
 			{0,0,1},
 			{1,0,1},
