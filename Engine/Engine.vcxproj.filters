@@ -30,7 +30,7 @@
     <ClInclude Include="src\io\keyListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\structs\linkedList.h">
+    <ClInclude Include="src\list\linkedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\geometry\model.h">
@@ -73,6 +73,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\memory\vertexBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\list\arrayList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -122,10 +125,13 @@
     <ClCompile Include="src\structs\arrayList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\structs\linkedList.cpp">
+    <ClCompile Include="src\list\linkedList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\memory\vertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\list\arrayList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

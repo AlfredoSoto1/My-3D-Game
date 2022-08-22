@@ -29,6 +29,7 @@
     <ClInclude Include="src\io\keyListener.h" />
     <ClInclude Include="src\io\mouseListener.h" />
     <ClInclude Include="src\io\windowListener.h" />
+    <ClInclude Include="src\list\arrayList.h" />
     <ClInclude Include="src\maths\constants.h" />
     <ClInclude Include="src\maths\functions.h" />
     <ClInclude Include="src\maths\matrix.h" />
@@ -37,7 +38,7 @@
     <ClInclude Include="src\memory\vertexBuffer.h" />
     <ClInclude Include="src\scene\camera.h" />
     <ClInclude Include="src\structs\arrayList.h" />
-    <ClInclude Include="src\structs\linkedList.h" />
+    <ClInclude Include="src\list\linkedList.h" />
     <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -50,13 +51,14 @@
     <ClCompile Include="src\io\keyListener.cpp" />
     <ClCompile Include="src\io\mouseListener.cpp" />
     <ClCompile Include="src\io\windowListener.cpp" />
+    <ClCompile Include="src\list\arrayList.cpp" />
     <ClCompile Include="src\maths\functions.cpp" />
     <ClCompile Include="src\maths\matrix.cpp" />
     <ClCompile Include="src\maths\vectors.cpp" />
     <ClCompile Include="src\memory\vertexBuffer.cpp" />
     <ClCompile Include="src\scene\camera.cpp" />
     <ClCompile Include="src\structs\arrayList.cpp" />
-    <ClCompile Include="src\structs\linkedList.cpp" />
+    <ClCompile Include="src\list\linkedList.cpp" />
     <ClCompile Include="vendor\stb_image.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

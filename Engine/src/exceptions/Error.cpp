@@ -15,6 +15,7 @@ void error::glCheckError() {
 	}
 }
 
-void error::throwOutBoundsError(unsigned int offNumber, unsigned int limit) {
+int error::throwOutBoundsError(unsigned int offNumber, unsigned int limit) {
 	std::cout << "Index out of bounds! " << offNumber << " of " << limit << std::endl;
+	return -1;
 }

@@ -5,6 +5,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "../../exceptions/Error.h"
 
 #include <thread>
 #include <iostream>
@@ -266,10 +267,11 @@ void Display::render(int isOnCallback) {
 	if (update != nullptr)
 		update();
 
+	//std::cout << "pointer to " << title << ": " << window << std::endl;
 	glfwSwapBuffers(window);
 	hasResized = false;
 
-	if(!isOnCallback)
+	if (!isOnCallback)
 		glfwPollEvents();
 	processFrames();
 }

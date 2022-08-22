@@ -1,22 +1,22 @@
 #pragma once
 
-#ifndef _ARRAY_LIST_DEFINED1
-#define _ARRAY_LIST_DEFINED1
+#ifndef _ARRAY_LIST_DEFINED
+#define _ARRAY_LIST_DEFINED
 
-namespace structs {
+namespace list {
 
 	template<class Object>
 	class ArrayList {
 	public:
+		//constructors
 		ArrayList();
 		ArrayList(unsigned int resizeStep);
 		~ArrayList();
 
-		//accessor
+		//accessors
 		Object* get(unsigned int index) const;
-		Object* find(const Object& object);
-		bool contains(const Object& object);
-		int indexOf(const Object& object);
+		int indexOf(const Object& object) const;
+		bool contains(const Object& object) const;
 
 		bool isEmpty() const;
 		unsigned int getCount() const;
@@ -28,9 +28,6 @@ namespace structs {
 		void insert(unsigned int index, const Object& object);
 		void clear();
 
-		template<class Type>
-		void sort(void(*pivotReturn)(const Object&, int*), void(*leftAndRight)(const Object&, const Object&, Type*, Type*));
-
 	private:
 		unsigned int arrayLength;
 		unsigned int elementCount;
@@ -41,10 +38,7 @@ namespace structs {
 		void resize();
 		bool needToResize();
 
-		template<class Type>
-		void quicksort(void(*pivotReturn)(const Object&, Type*), void(*leftAndRight)(const Object&, const Object&, Type*, Type*),
-			Object* array, int lowIndex, int highIndex);
-		void swapElement(Object* array, int index1, int index2);
+		int find(const Object& object);
 	};
 
 }
