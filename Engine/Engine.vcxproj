@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\buffers\vertexBuffer.h" />
     <ClInclude Include="src\graphics\component\Display.h" />
     <ClInclude Include="src\exceptions\Error.h" />
     <ClInclude Include="src\graphics\geometry\mesh.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\buffers\vertexBuffer.cpp" />
     <ClCompile Include="src\graphics\component\Display.cpp" />
     <ClCompile Include="src\exceptions\Error.cpp" />
     <ClCompile Include="src\graphics\geometry\mesh.cpp" />
