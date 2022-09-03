@@ -3,7 +3,7 @@
 #include "functions.h"
 #include "constants.h"
 
-#include <math.h>
+#include <cmath>
 
 using namespace maths;
 

@@ -35,6 +35,7 @@ namespace maths {
 		bool operator == (const float value);
 		bool operator == (const vec2& vector);
 		bool operator != (const vec2& vector);
+
 	};
 
 	struct vec3 {

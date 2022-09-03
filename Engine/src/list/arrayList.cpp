@@ -1,8 +1,8 @@
 #include "arrayList.h"
 #include "../exceptions/Error.h"
 
-#ifndef _IMPLEMENTATION_DEFINED_ARRAY_LIST
-#define _IMPLEMENTATION_DEFINED_ARRAY_LIST
+#ifndef _ARRAY_LIST_IMPLEMENTED
+#define _ARRAY_LIST_IMPLEMENTED
 
 namespace list {
 	/*
@@ -38,17 +38,17 @@ namespace list {
 		reaches max size.
 	*/
 	template<class Object>
-	void ArrayList<Object>::resize() {
+	void ArrayList<Object>::resize(unsigned int listCount) {
 		if (data == nullptr) {
-			data = new Object[arrayLength];
+			data = new Object[arrayLength + listCount];
 			return;
 		}
-		Object* tempData = new Object[arrayLength * 2];
-		for (unsigned int i = 0; i < arrayLength; i++)
+		Object* tempData = new Object[(arrayLength + listCount) * 2];
+		for (unsigned int i = 0; i < arrayLength + listCount; i++)
 			tempData[i] = data[i];
 		delete[] data;
 		data = tempData;
-		arrayLength *= 2;
+		arrayLength = arrayLength + listCount * 2;
 	}
 
 	/*
@@ -56,8 +56,8 @@ namespace list {
 		list needs to resize.
 	*/
 	template<class Object>
-	bool ArrayList<Object>::needToResize() {
-		return elementCount == arrayLength;
+	bool ArrayList<Object>::needToResize(unsigned int listSize) {
+		return elementCount + listSize >= arrayLength;
 	}
 
 	/*
@@ -157,6 +157,18 @@ namespace list {
 		if (needToResize())
 			resize();
 		data[elementCount++] = object;
+	}
+
+	/*
+		add(const ArrayList<Object>& list) function adds to list
+		a list of objects
+	*/
+	template<class Object>
+	void ArrayList<Object>::add(const ArrayList<Object>& objList) {
+		if (needToResize(objList.getCount()))
+			resize(objList.getCount());
+		for (int i = 0; i < objList.getCount(); i++)
+			data[elementCount++] = *objList.get(i);
 	}
 
 	/*

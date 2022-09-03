@@ -1,8 +1,8 @@
 #include "linkedList.h"
 #include "../exceptions/Error.h"
 
-#ifndef _IMPLEMENTATION_DEFINED_ARRAY_LIST
-#define _IMPLEMENTATION_DEFINED_ARRAY_LIST
+#ifndef _IMPLEMENTATION_DEFINED_LINKED_LIST
+#define _IMPLEMENTATION_DEFINED_LINKED_LIST
 
 namespace list {
 	/*

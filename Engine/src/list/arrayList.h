@@ -23,6 +23,7 @@ namespace list {
 
 		//modifiers
 		void add(const Object& object);
+		void add(const ArrayList<Object>& objList);
 		void replace(unsigned int index, const Object& object);
 		void remove(unsigned int index);
 		void insert(unsigned int index, const Object& object);
@@ -35,8 +36,8 @@ namespace list {
 
 		Object* data;
 
-		void resize();
-		bool needToResize();
+		void resize(unsigned int listCount = 0);
+		bool needToResize(unsigned int listCount = 0);
 
 		int find(const Object& object);
 	};

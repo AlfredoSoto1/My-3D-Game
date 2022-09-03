@@ -3,9 +3,14 @@
 #ifndef _MATRIX_DEFINED
 #define _MATRIX_DEFINED
 
-#include "vectors.h"
-
 namespace maths {
+
+	//pre-declare vectors
+	//vec# implementation will be on cpp file
+	struct vec2;
+	struct vec3;
+	struct vec4;
+
 	struct mat2 {
 	public:
 		static const unsigned int row = 2;

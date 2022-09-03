@@ -7,7 +7,7 @@ namespace maths {
 
 	void quicksort(int length, int* array);
 
-	//returns the quantity of bits given as a parameter: _limit
+	//returns the quantity of bits given as a parameter: limit
 	unsigned int partOfInt(int number, int limit);
 	unsigned long partOfLong(long number, int limit);
 	unsigned char partOfByte(char number, int limit);
