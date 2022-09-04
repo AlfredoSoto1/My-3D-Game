@@ -32,6 +32,9 @@
     <ClInclude Include="src\tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\paralax\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\testF.glsl" />

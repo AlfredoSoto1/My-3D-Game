@@ -4,13 +4,16 @@
 
 #include "graphics/component/Display.h"
 
-#include "RendererTest.h"
+//#include "RendererTest.h"
+#include "paralax/Renderer.h"
 
 int init();
 int update();
 int dispose();
 
-RendererTest* renderTest;
+//RendererTest* renderTest;
+
+Renderer* renderer;
 
 int main() {
 
@@ -31,8 +34,11 @@ int init() {
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
-	renderTest = new RendererTest();
-	renderTest->init();
+	//renderTest = new RendererTest();
+	//renderTest->init();
+
+	renderer = new Renderer();
+	renderer->init();
 
 	return 0; //error code
 }
@@ -42,14 +48,16 @@ int update() {
 
 	//always clear buffer before render
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderTest->render();
+	renderer->render();
+	//renderTest->render();
 
 	return 0; //error code
 }
 
 //disposes or cleans everything created in memory by the library
 int dispose() {
-	delete renderTest;
+	delete renderer;
+	//delete renderTest;
 	return 0; //error code
 }
 
