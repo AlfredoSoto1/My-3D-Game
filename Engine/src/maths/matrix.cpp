@@ -437,11 +437,11 @@ void maths::subMatOf(mat3& matrix, unsigned int row, unsigned int col, mat2* des
 			}
 }
 
-void maths::subMatOf(mat4& matrix, unsigned int row, unsigned int col, mat3* dest) {
+void maths::subMatOf(mat4& matrix, unsigned int _row, unsigned int _col, mat3* dest) {
 	int subRow = 0, subCol = 0;
 	for (unsigned int row = 0; row < matrix.col; row++)
 		for (unsigned int col = 0; col < matrix.col; col++)
-			if (row != row && col != col) {
+			if (row != _row && col != _col) {
 				(*dest)[subCol++ + subRow * (matrix.col - 1)] = matrix[col + row * matrix.col];
 				if (subCol == matrix.col - 1) {
 					subCol = 0;

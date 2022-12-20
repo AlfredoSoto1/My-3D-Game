@@ -16,7 +16,7 @@ namespace maths {
 
 		float& operator [] (unsigned int index);
 		float& operator () (unsigned int row, unsigned int col);
-
+		
 		operator float* ();
 
 		vec2 operator * (const vec2& vector);

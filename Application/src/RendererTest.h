@@ -29,7 +29,7 @@ public:
 	scene::Camera* camera;
 
 	generation::ChunkBuilder* chunkBuilder;
-
+	 
 	RendererTest() {
 
 	}
